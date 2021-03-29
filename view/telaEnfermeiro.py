@@ -1,8 +1,8 @@
-from abstractTela import AbstractTela
+from view.abstractTela import AbstractTela
+from control.controladorEnfermeiro import ControladorEnfermeiro
 
 class TelaEnfermeiro(AbstractTela):
     def __init__(self, controlador_enfermeiro : ControladorEnfermeiro):
-        super().__init()
         self.__controlador_enfermeiro = controlador_enfermeiro
 
     def mostrar_menu(self):
@@ -20,7 +20,7 @@ class TelaEnfermeiro(AbstractTela):
 
         return self.ler_numero([1,2,3,4,5,0])
     
-    def recebe_dados_enfermeiro():
+    def recebe_dados_enfermeiro(self):
 
         dados_enfermeiro = {}
         dados_enfermeiro["nome"] = self.ler_string("Digite o nome do enfermeiro: ")

@@ -1,6 +1,6 @@
-from pessoa.py import Pessoa
-from agendamento impot Agendamento
-from paciente import Paciente
+from model.pessoa import Pessoa
+from model.agendamento import Agendamento
+from model.paciente import Paciente
 
 class Enfermeiro(Pessoa):
     def __init__(self, nome: str, cpf: int):
@@ -24,7 +24,7 @@ class Enfermeiro(Pessoa):
             duplicado = False
             while i < len(self.__agendamentos) and duplicado is False:
                 if self.__agendamentos[i].hora == agendamento.hora:
-                    duplidado == True
+                    duplicado == True
                 i += 1
             if duplicado is not True:
                 self.__agendamentos.append(agendamento)
@@ -35,7 +35,7 @@ class Enfermeiro(Pessoa):
             duplicado = False
             while i < len(self.__pacientes) and duplicado is False:
                 if self.__pacientes[i].nome == paciente.nome:
-                    duplidado == True
+                    duplicado == True
                 i += 1
             if duplicado is not True:
                 self.__pacientes.append(paciente)

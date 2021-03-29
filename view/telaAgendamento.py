@@ -1,11 +1,12 @@
-from model.ControladorAgendamento import ControladorAgendamento
+from control.ControladorAgendamento import ControladorAgendamento
+from view.abstractTela import AbstractTela
 
 class TelaAgendamento(AbstractTela):
 
     def __init__(self, controlador_agendamento: ControladorAgendamento):
         self.__controlador_agendamento = controlador_agendamento
         
-    def mostrar_menu(self, opcoes):
+    def mostrar_menu(self):
 
         print("")
         print("------------Menu de Agendamentos------------")

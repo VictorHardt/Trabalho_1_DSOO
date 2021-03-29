@@ -1,5 +1,5 @@
 class TelaVacina:
-    def __init__(self, controlador_vacina: Cotrolador_vacina):
+    def __init__(self, controlador_vacina: ControladorVacina):
         self.__controlador_vacina = controlador_vacina
 
     def mostrar_menu(self):

@@ -1,3 +1,8 @@
+from model.enfermeiro import Enfermeiro
+from model.paciente import Paciente
+from model.vacina import Vacina
+from datetime import date
+
 class Agendamento:
     def __init__(self, data: date, hora: int, enfermeiro: Enfermeiro, paciente: Paciente, vacina: vacina):
         if isinstance(data, date):
@@ -39,7 +44,7 @@ class Agendamento:
             self.__enfermeiro = enfermeiro
 
     @property
-    def paciente(self) -> paciente:
+    def paciente(self) -> Paciente:
         return self.__paciente
 
     @paciente.setter

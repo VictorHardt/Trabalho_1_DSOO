@@ -1,5 +1,6 @@
-print("teste")
+from control.controladorSistema import ControladorSistema
+
 print("teste")
 
-print('teste')
-print('testando')
+sis = ControladorSistema()
+sis.abre_tela()

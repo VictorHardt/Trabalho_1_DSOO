@@ -40,3 +40,5 @@ class Enfermeiro(Pessoa):
             if duplicado is not True:
                 self.__pacientes.append(paciente)
 
+    def altera_dados_enfermeiro(self):
+        pass

@@ -1,16 +1,22 @@
 from model.enfermeiro import Enfermeiro
 from view.telaEnfermeiro import TelaEnfermeiro
+from control.controladorSistema import ControladorSistema
 
 class ControladorEnfermeiro():
     def __init__(self, controlador_sistema: ControladorSistema):
         self.__tela = TelaEnfermeiro(self)
         self.__controlador_sistema = controlador_sistema
         self.__enfermeiros = []
+        self.__continuar = True
         
     def abre_tela(self):
 
-        lista_opcoes = {1: self.cadastra_enfermeiro, 2: self.altera_dados_enfermeiro, 3: self.exlui_enfermeiro, 
-                        4: self.lista_agendamentos, 5: self.lista_pacientes, 0: self.retorna}
+        lista_opcoes = {
+            1: self.cadastra_enfermeiro,
+            2: self.altera_dados_enfermeiro,
+            3: self.exlui_enfermeiro, 
+            4: self.lista_agendamentos, 5: self.lista_pacientes, 0: self.retorna
+        }
         while True:            
             opcao_escolhida = self.__tela.mostrar_menu()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
@@ -32,9 +38,9 @@ class ControladorEnfermeiro():
                 self.__enfermeiros.append(Enfermeiro(nome, cpf))
                 cadastrou = True
             else:
-                self.__tela.nome_duplicado_error(cpf)
+                self.__tela.cpf_duplicado_error(cpf)
 
-    def altera_dados(self):
+    def altera_dados_enfermeiro(self):
         pass
 
     def exlui_enfermeiro(self):
@@ -46,3 +52,5 @@ class ControladorEnfermeiro():
     def lista_pacientes(self):
         pass
 
+    def retorna(self):
+        self.__continuar = False

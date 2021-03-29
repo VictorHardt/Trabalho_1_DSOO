@@ -1,3 +1,5 @@
+from abstractTela import AbstractTela
+
 class TelaEnfermeiro(AbstractTela):
     def __init__(self, controlador_enfermeiro : ControladorEnfermeiro):
         super().__init()
@@ -25,7 +27,7 @@ class TelaEnfermeiro(AbstractTela):
         dados_enfermeiro["cpf"] = self.ler_string("Digite o cpf do enfermeiro: ")
         return dados_enfermeiro
 
-    def nome_duplicado_error(self, nome):
+    def nome_duplicado_error(self, cpf):
         print("")
         print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
 

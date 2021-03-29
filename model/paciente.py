@@ -1,4 +1,5 @@
 from model.agendamento import Agendamento
+from model.pessoa import Pessoa
 
 class Paciente(Pessoa):
     def __init__(self, idade: int, nome: str):

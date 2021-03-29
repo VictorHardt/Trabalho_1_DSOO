@@ -15,3 +15,8 @@ class TelaVacina:
         opcao = int(input("Escolha a opcao: "))
         return opcao
 
+    def mostrar_vacinas(self):
+        pass
+
+    def recebe_dados_vacina(self):
+        pass

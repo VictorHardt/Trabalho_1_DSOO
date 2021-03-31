@@ -2,8 +2,9 @@ from model.agendamento import Agendamento
 from model.pessoa import Pessoa
 
 class Paciente(Pessoa):
-    def __init__(self, idade: int, nome: str):
-        super().__init__(nome)
+    def __init__(self, idade: int, nome: str, cpf: int):
+        if isinstance(nome, str) and isinstance(cpf, int):
+            super().__init__(nome, cpf)
         if isinstance(idade, int):
             self.__idade = idade
 
@@ -24,5 +25,3 @@ class Paciente(Pessoa):
     def agendamento(self, agendamento: Agendamento):
         if isinstance(agendamento, Agendamento):
             self.__agendamento = agendamento
-
-    # Vacinação? implementar classe ou incluir atributo na classe agendamento?

@@ -29,16 +29,16 @@ class ControladorSistema:
             funcao_escolhida()
 
     def abre_tela_pacientes(self):
-        pass
+        self.__controlador_paciente.abre_tela()
 
     def abre_tela_agendamentos(self):
-        pass
+        self.__controlador_agendamento.abre_tela()
 
     def abre_tela_enfermeiros(self):
-        pass
+        self.__controlador_enfermeiro.abre_tela()
 
     def abre_tela_vacinas(self):
-        pass
+        self.__controlador_vacina.abre_tela()
 
     def sair(self):
         self.__continuar = False

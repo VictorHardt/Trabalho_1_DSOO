@@ -14,9 +14,11 @@ class ControladorEnfermeiro:
             1: self.cadastra_enfermeiro,
             2: self.altera_dados_enfermeiro,
             3: self.exlui_enfermeiro, 
-            4: self.lista_agendamentos, 5: self.lista_pacientes, 0: self.retorna
+            4: self.lista_enfermeiros,
+            5: self.lista_pacientes,
+            0: self.retorna
         }
-        while True:            
+        while self.__continuar:            
             opcao_escolhida = self.__tela.mostrar_menu()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
@@ -45,11 +47,18 @@ class ControladorEnfermeiro:
     def exlui_enfermeiro(self):
         pass
 
-    def lista_agendamentos(self):
+    def lista_enfermeiros(self):
         pass
 
     def lista_pacientes(self):
         pass
+
+    def retorna_enfermeiro(self, nome:str) -> Enfermeiro:
+        enf = None
+        for enfermeiro in self.__enfermeiros:
+            if enfermeiro.nome == nome:
+                enf = enfermeiro
+        return enf
 
     def retorna(self):
         self.__continuar = False

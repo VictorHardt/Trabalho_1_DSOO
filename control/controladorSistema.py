@@ -6,10 +6,10 @@ from view.telaSistema import TelaSistema
 
 class ControladorSistema:
     def __init__(self):
-        self.__controlador_agendamento = ControladorAgendamento()
         self.__controlador_enfermeiro = ControladorEnfermeiro()
         self.__controlador_vacina = ControladorVacina()
         self.__controlador_paciente = ControladorPaciente()
+        self.__controlador_agendamento = ControladorAgendamento(self.__controlador_vacina, self.__controlador_paciente, self.__controlador_enfermeiro)
         self.__tela = TelaSistema()
         self.__continuar = True
 

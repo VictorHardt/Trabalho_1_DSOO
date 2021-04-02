@@ -7,12 +7,12 @@ class TelaEnfermeiro(AbstractTela):
     def mostrar_menu(self):
         
         print("")
-        print("------------Menu de Agendamentos------------")
+        print("------------ Enfermeiro ------------")
         print("")
         print("1 : Cadastra Enfermeiro")
         print("2 : Altera Dados do Enfermeiro")
         print("3 : Exclui Enfermeiro")
-        print("4 : Lista Agendamentos")
+        print("4 : Lista Enfermeiros")
         print("5 : Lista Pacientes")
         print("0 : Retornar")
         print("")

@@ -7,7 +7,7 @@ class ControladorPaciente:
         self.__tela = TelaPaciente()
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente(), 3: self.altera_dados_paciente(), 4: self.possui_agendamento, 5: self.lista_espera, 0: self.retorna}
+        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente(), 3: self.altera_dados_paciente(), 0: self.retorna}
 
         while True:
             opcao_escolhida = self.__tela.mostrar_menu()
@@ -20,7 +20,7 @@ class ControladorPaciente:
         paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"])
 
         for i in self.__pacientes:
-            if "CPF" == paciente.cpf:
+            if i.cpf == paciente.cpf:
                 self.__tela.cpf_duplicado_error(paciente.cpf)
             else:
                 self.__pacientes.append(paciente)
@@ -31,11 +31,12 @@ class ControladorPaciente:
     def exclui_paciente(self):
         pass
 
-    def possui_agendamento(self):
-        pass
-
-    def lista_espera(self):
-        pass
+    def retorna_paciente(self, cpf:str) -> Paciente:
+        pac = None
+        for paciente in self.__pacientes:
+            if paciente.cpf == cpf:
+                pac = paciente
+        return pac
 
     def retorna(self):
         pass

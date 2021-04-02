@@ -7,7 +7,7 @@ class TelaSistema(AbstractTela):
     def mostrar_menu(self):
 
         print("")
-        print("------------Sistema de Vacinação------------")
+        print("------------ Sistema de Vacinação ------------")
         print("")
         print("1 : Tela de Pacientes")
         print("2 : Tela de Enfermeiros")

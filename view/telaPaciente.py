@@ -10,15 +10,17 @@ class TelaPaciente(AbstractTela):
         print("1 - Cadastrar paciente")
         print("2 - Alterar dados do paciente")
         print("3 - Excluir paciente")
-        print("4 - Verificar se paciente possui agendamento")
-        print("5 - Verificar fila de pacientes")
         print("0 - Retornar")
 
-        return self.ler_numero([1,2,3,4,0])
+        return self.ler_numero([1,2,3,0])
 
     def recebe_dados_paciente(self):
         nome = self.ler_string("Nome: ")
-        idade = self.ler_string("Idade: ")
+        idade = 160
+        while idade > 150:
+            idade = self.ler_numero(None, "Idade: ")
+            if idade > 150:
+                print("Digite uma idade válida entre 0 e 150")
         cpf = self.ler_string("CPF: ")
 
         return {"nome": nome, "idade": idade, "CPF": cpf}

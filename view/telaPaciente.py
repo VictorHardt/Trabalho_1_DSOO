@@ -1,9 +1,8 @@
 from view.abstractTela import AbstractTela
-from control.controladorPaciente import ControladorPaciente
 
 class TelaPaciente(AbstractTela):
-    def __init__(self, controlador_paciente: ControladorPaciente):
-        self.__controlador_paciente = controlador_paciente
+    def __init__(self):
+        pass
 
     def mostrar_menu(self):
         print("-------- Paciente ----------")

@@ -1,9 +1,8 @@
-from control.controladorSistema import ControladorSistema
 from view.abstractTela import AbstractTela
 
 class TelaSistema(AbstractTela):
-    def __init__(self, controlador_sistema: ControladorSistema):
-        self.__controlador_sistema = ControladorSistema
+    def __init__(self):
+        pass
 
     def mostrar_menu(self):
 

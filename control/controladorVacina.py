@@ -1,12 +1,10 @@
 from model.vacina import Vacina
 from view.telaVacina import TelaVacina
-from control.controladorSistema import ControladorSistema
 
 class ControladorVacina:
-    def __init__(self, controlador_sistema: ControladorSistema):
-        self.__controlador_sistema = controlador_sistema
+    def __init__(self):
         self.__vacinas = []
-        self.__tela = TelaVacina(self)
+        self.__tela = TelaVacina()
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_vacina, 2: self.add_doses, 3: self.excluir, 4: self.alterar, 5: self.qtd_doses_cada_fabricante, 0: self.retorna}

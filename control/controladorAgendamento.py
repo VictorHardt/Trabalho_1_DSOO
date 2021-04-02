@@ -1,15 +1,14 @@
 from model.agendamento import Agendamento
 from view.telaAgendamento import TelaAgendamento
-from control.controladorSistema import ControladorSistema
 
 class ControladorAgendamento:
-    def __init__(self, controlador_sistema: ControladorSistema):
-        self.__controlador_sistema = controlador_sistema
-        self.__tela = TelaAgendamento(self)
+    def __init__(self):
+        self.__tela = TelaAgendamento()
         self.__continuar = True
 
     def abre_tela(self):
 
+        self.__continuar = True
         lista_opcoes = {
             1: self.novo_agendamento, 
             2: self.checa_agendamento, 

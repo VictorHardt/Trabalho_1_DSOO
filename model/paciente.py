@@ -1,4 +1,3 @@
-from model.agendamento import Agendamento
 from model.pessoa import Pessoa
 
 class Paciente(Pessoa):
@@ -16,12 +15,3 @@ class Paciente(Pessoa):
     def idade(self, idade: int):
         if isinstance(idade, int):
             self.__idade = idade
-
-    @property
-    def agendamento(self) -> Agendamento:
-        return self.__agendamento
-
-    @agendamento.setter
-    def agendamento(self, agendamento: Agendamento):
-        if isinstance(agendamento, Agendamento):
-            self.__agendamento = agendamento

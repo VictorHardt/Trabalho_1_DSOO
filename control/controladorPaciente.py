@@ -1,12 +1,10 @@
 from model.paciente import Paciente
 from view.telaPaciente import TelaPaciente
-from control.controladorSistema import ControladorSistema
 
 class ControladorPaciente:
-    def __init__(self, controlador_sistema: ControladorSistema):
-        self.__controlador_sistema = controlador_sistema
+    def __init__(self):
         self.__pacientes = []
-        self.__tela = TelaPaciente(self)
+        self.__tela = TelaPaciente()
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente(), 3: self.altera_dados_paciente(), 4: self.possui_agendamento, 5: self.lista_espera, 0: self.retorna}

@@ -1,16 +1,15 @@
 from model.enfermeiro import Enfermeiro
 from view.telaEnfermeiro import TelaEnfermeiro
-from control.controladorSistema import ControladorSistema
 
 class ControladorEnfermeiro:
-    def __init__(self, controlador_sistema: ControladorSistema):
-        self.__tela = TelaEnfermeiro(self)
-        self.__controlador_sistema = controlador_sistema
+    def __init__(self):
+        self.__tela = TelaEnfermeiro()
         self.__enfermeiros = []
         self.__continuar = True
         
     def abre_tela(self):
 
+        self.__continuar = True
         lista_opcoes = {
             1: self.cadastra_enfermeiro,
             2: self.altera_dados_enfermeiro,

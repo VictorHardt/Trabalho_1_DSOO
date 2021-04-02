@@ -4,7 +4,7 @@ from model.vacina import Vacina
 from datetime import date
 
 class Agendamento:
-    def __init__(self, data: date, hora: int, enfermeiro: Enfermeiro, paciente: Paciente, vacina: vacina):
+    def __init__(self, data: date, hora: int, enfermeiro: Enfermeiro, paciente: Paciente, vacina: Vacina):
         if isinstance(data, date):
             self.__data = data
         if isinstance(hora, int):

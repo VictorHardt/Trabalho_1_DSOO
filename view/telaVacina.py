@@ -1,4 +1,7 @@
-class TelaVacina:
+from view.abstractTela import AbstractTela
+from control.controladorVacina import ControladorVacina
+
+class TelaVacina(AbstractTela):
     def __init__(self, controlador_vacina: ControladorVacina):
         self.__controlador_vacina = controlador_vacina
 
@@ -12,11 +15,17 @@ class TelaVacina:
         print("5 - Exibir quantidade total de doses de vacina disponíveis por fabricante")
         print("0 - Retornar")
 
-        opcao = int(input("Escolha a opcao: "))
-        return opcao
-
-    def mostrar_vacinas(self):
-        pass
+        return self.ler_numero([1,2,3,4,5,0])
 
     def recebe_dados_vacina(self):
+        fabricante = self.ler_string("Fabricante: ")
+        quantidade_doses = self.ler_string("Quantidade de doses: ")
+
+        return {"fabricante": fabricante, "quantidade de doses": quantidade_doses}
+
+    def vacina_repetida(self, fabricante):
+        print("")
+        print("A vacina com fabricante {} já está na lista de vacinas! ".format(fabricante))
+
+    def mostrar_vacinas(self):
         pass

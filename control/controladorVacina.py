@@ -1,8 +1,9 @@
 from model.vacina import Vacina
 from view.telaVacina import TelaVacina
+from control.controladorSistema import ControladorSistema
 
 class ControladorVacina:
-    def __init__(self, controlador_sistema: Controlador_sistema):
+    def __init__(self, controlador_sistema: ControladorSistema):
         self.__controlador_sistema = controlador_sistema
         self.__vacinas = []
         self.__tela = TelaVacina(self)
@@ -15,13 +16,16 @@ class ControladorVacina:
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
 
-    def cadastra_vacina(self, fabricante: str, quantidade: int):
-        if isinstance(fabricante, str):
-            self.__fabricante = fabricante
-        if isinstance(quantidade, int):
-            self.__quantidade = quantidade
+    def cadastra_vacina(self):
+        dados_vacina = self.__tela.recebe_dados_vacina()
 
-        pass
+        vacina = Vacina(dados_vacina["fabricante"], dados_vacina["quantidade de doses"])
+
+        for i in self.__vacinas:
+            if "fabricante" == vacina.fabricante:
+                self.__tela.vacina_repetida(vacina.fabricante)
+            else:
+                self.__vacinas.append(vacina)
 
     def add_doses(self, fabricante: str, quantidade: int):
         if isinstance(fabricante, str):

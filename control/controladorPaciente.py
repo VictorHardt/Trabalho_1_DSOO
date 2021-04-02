@@ -1,5 +1,6 @@
 from model.paciente import Paciente
 from view.telaPaciente import TelaPaciente
+from control.controladorSistema import ControladorSistema
 
 class ControladorPaciente:
     def __init__(self, controlador_sistema: ControladorSistema):
@@ -8,7 +9,7 @@ class ControladorPaciente:
         self.__tela = TelaPaciente(self)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados, 3: self.possui_agendamento, 4: self.lista_espera, 0: self.retorna}
+        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente(), 3: self.altera_dados_paciente(), 4: self.possui_agendamento, 5: self.lista_espera, 0: self.retorna}
 
         while True:
             opcao_escolhida = self.__tela.mostrar_menu()
@@ -16,18 +17,23 @@ class ControladorPaciente:
             funcao_escolhida()
 
     def cadastra_paciente(self):
+        dados_paciente = self.__tela.recebe_dados_paciente()
+
+        paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"])
+
+        for i in self.__pacientes:
+            if "CPF" == paciente.cpf:
+                self.__tela.cpf_duplicado_error(paciente.cpf)
+            else:
+                self.__pacientes.append(paciente)
+
+    def altera_dados_paciente(self):
         pass
 
-    def altera_dados(self):
+    def exclui_paciente(self):
         pass
 
     def possui_agendamento(self):
-        pass
-
-    def exclui_agendamento(self): #?
-        pass
-
-    def coloca_na_fila_de_espera(self): #?
         pass
 
     def lista_espera(self):

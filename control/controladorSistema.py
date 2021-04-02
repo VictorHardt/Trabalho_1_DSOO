@@ -4,12 +4,12 @@ from control.controladorPaciente import ControladorPaciente
 from control.controladorEnfermeiro import ControladorEnfermeiro
 from view.telaSistema import TelaSistema
 
-class ControladorSistema():
+class ControladorSistema:
     def __init__(self):
-        self.__controlador_agendamento = ControladorAgendamento
-        self.__controlador_enfermeiro = ControladorEnfermeiro
-        self.__controlador_vacina = ControladorVacina
-        self.__controlador_paciente = ControladorPaciente
+        self.__controlador_agendamento = ControladorAgendamento(self)
+        self.__controlador_enfermeiro = ControladorEnfermeiro(self)
+        self.__controlador_vacina = ControladorVacina(self)
+        self.__controlador_paciente = ControladorPaciente(self)
         self.__tela = TelaSistema(self)
         self.__continuar = True
 

@@ -2,10 +2,11 @@ from model.agendamento import Agendamento
 from view.telaAgendamento import TelaAgendamento
 from control.controladorSistema import ControladorSistema
 
-class ControladorAgendamento():
+class ControladorAgendamento:
     def __init__(self, controlador_sistema: ControladorSistema):
         self.__controlador_sistema = controlador_sistema
-        self.__tela = TelaAgendamento(self) 
+        self.__tela = TelaAgendamento(self)
+        self.__continuar = True
 
     def abre_tela(self):
 
@@ -16,7 +17,7 @@ class ControladorAgendamento():
             4: self.altera_agendamento, 
             0: self.retorna
         }
-        while True:            
+        while self.__continuar:            
             opcao_escolhida = self.__tela.mostrar_menu()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
@@ -34,4 +35,4 @@ class ControladorAgendamento():
         pass
 
     def retorna(self):
-        pass
+        self.__continuar = False

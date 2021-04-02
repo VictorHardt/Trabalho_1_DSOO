@@ -2,7 +2,7 @@ from model.enfermeiro import Enfermeiro
 from view.telaEnfermeiro import TelaEnfermeiro
 from control.controladorSistema import ControladorSistema
 
-class ControladorEnfermeiro():
+class ControladorEnfermeiro:
     def __init__(self, controlador_sistema: ControladorSistema):
         self.__tela = TelaEnfermeiro(self)
         self.__controlador_sistema = controlador_sistema

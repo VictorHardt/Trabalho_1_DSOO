@@ -1,4 +1,7 @@
-class Pessoa:
+from abc import ABC, abstractmethod
+
+class Pessoa(ABC):
+    @abstractmethod
     def __init__(self, nome: str, cpf: int):
         if isinstance(nome, str):
             self.__nome = nome

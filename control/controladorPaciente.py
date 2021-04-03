@@ -20,11 +20,13 @@ class ControladorPaciente:
 
         paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"])
 
+        duplicado = False
         for i in self.__pacientes:
             if i.cpf == paciente.cpf:
                 self.__tela.cpf_duplicado_error(paciente.cpf)
-            else:
-                self.__pacientes.append(paciente)
+                duplicado = True
+        if not duplicado:
+            self.__pacientes.append(paciente)
 
     def altera_dados_paciente(self):
         pass

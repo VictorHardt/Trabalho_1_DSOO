@@ -2,8 +2,8 @@ from model.pessoa import Pessoa
 from model.paciente import Paciente
 
 class Enfermeiro(Pessoa):
-    def __init__(self, nome: str, cpf: int):
-        if isinstance(nome, str) and isinstance(cpf, int): 
+    def __init__(self, nome: str, cpf: str):
+        if isinstance(nome, str) and isinstance(cpf, str): 
             super().__init__(nome, cpf)
         self.__pacientes = []
 

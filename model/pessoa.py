@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 
 class Pessoa(ABC):
-    @abstractmethod
-    def __init__(self, nome: str, cpf: int):
+    def __init__(self, nome: str, cpf: str):
         if isinstance(nome, str):
             self.__nome = nome
-        if isinstance(cpf, int):
+        if isinstance(cpf, str):
             self.__cpf = cpf
 
     @property

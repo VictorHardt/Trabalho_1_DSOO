@@ -30,5 +30,6 @@ class TelaEnfermeiro(AbstractTela):
         
         print("")
         print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
+        input("")
 
 

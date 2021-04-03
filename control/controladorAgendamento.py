@@ -45,6 +45,7 @@ class ControladorAgendamento:
         else:
             agendamento = Agendamento(data, hora, enfermeiro, paciente, vacina)
             self.__agendamentos.append(agendamento)
+            self.__tela.mostra_agendamento(agendamento.paciente.nome, agendamento.enfermeiro.nome, agendamento.data.year, agendamento.data.month, agendamento.data.day, agendamento.vacina.fabricante)
         
 
     def checa_agendamento(self):

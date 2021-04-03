@@ -53,10 +53,10 @@ class ControladorEnfermeiro:
     def lista_pacientes(self):
         pass
 
-    def retorna_enfermeiro(self, nome:str) -> Enfermeiro:
+    def retorna_enfermeiro(self, nome_enfermeiro:str) -> Enfermeiro:
         enf = None
         for enfermeiro in self.__enfermeiros:
-            if enfermeiro.nome == nome:
+            if enfermeiro.nome == nome_enfermeiro:
                 enf = enfermeiro
         return enf
 

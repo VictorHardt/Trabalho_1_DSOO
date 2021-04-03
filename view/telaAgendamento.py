@@ -35,22 +35,27 @@ class TelaAgendamento(AbstractTela):
     def paciente_nao_existe_error(self, cpf):
         print("")
         print("Não existe nenhum paciente cadastrado com o cpf {}, realize o cadastro do paciente antes do agendamento.".format(cpf))
+        input("")
 
     def enfermeiro_nao_existe_error(self, nome):
         print("")
-        print("Não existe nenhum enfermeiro cadastrado com o nome {}, realize o cadastro do enfermeiro antes do agendamento.".format(nome)) 
+        print("Não existe nenhum enfermeiro cadastrado com o nome {}, realize o cadastro do enfermeiro antes do agendamento.".format(nome))
+        input("")
 
     def sem_estoque_de_vacina_error(self):
         print("")
         print("Não há doses suficientes de vacina para o agendamento.")
+        input("")
 
     def mostra_agendamento(self, paciente_nome, enfermeiro_nome, ano, mes, dia, fabricante):
         print("")
-        print("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}".format(paciente_nome, enfermeiro_nome, ano, mes, dia, fabricante))
+        print("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}!".format(paciente_nome, ano, mes, dia, enfermeiro_nome, fabricante))
+        input("")
 
     def nao_ha_agendamento(self, cpf):
         print("")
         print("Não há nenhum agendamento com o cpf {}.".format(cpf))
+        input("")
 
     def removeu_agendamento(self, cpf):
 
@@ -58,6 +63,7 @@ class TelaAgendamento(AbstractTela):
             print(f"Não há nenhum agendamento com o cpf {cpf}")
         elif cpf is None:
             print("Seu agendamento foi removido com sucesso!")
+        input("")
 
     def opcao_para_alteracao(self):
 
@@ -94,3 +100,4 @@ class TelaAgendamento(AbstractTela):
     def alterado(self):
         print("")
         print("Seu agendamento foi alterado com sucesso!")
+        input("")

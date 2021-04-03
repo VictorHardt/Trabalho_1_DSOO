@@ -28,3 +28,4 @@ class TelaPaciente(AbstractTela):
     def cpf_duplicado_error(self, cpf):
         print("")
         print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
+        input("")

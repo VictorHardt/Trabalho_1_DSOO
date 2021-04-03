@@ -89,9 +89,6 @@ class ControladorVacina:
         for vacina in self.__vacinas:
             self.__tela.mostrar_vacinas({"fabricante": vacina.fabricante, "quantidade de doses": vacina.qtd_doses})
 
-    def tem_dose_disponivel(self):
-        pass
-
     def retorna_vacina_para_agendamento(self):
 
         vacina = None
@@ -99,7 +96,7 @@ class ControladorVacina:
         while vacina is None and i < len(self.__vacinas):
             if self.__vacinas[i].qtd_doses >= 2:
                 vacina = self.__vacinas[i]
-                vacina.qtd_doses(vacina.qtd_doses - 2)
+                vacina.qtd_doses -= 2
         return vacina
 
     def retorna(self):

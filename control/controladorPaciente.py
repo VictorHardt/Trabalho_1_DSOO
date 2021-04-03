@@ -5,11 +5,12 @@ class ControladorPaciente:
     def __init__(self):
         self.__pacientes = []
         self.__tela = TelaPaciente()
+        self.__continuar = True
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente(), 3: self.altera_dados_paciente(), 0: self.retorna}
 
-        while True:
+        while self.__continuar:
             opcao_escolhida = self.__tela.mostrar_menu()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
@@ -39,4 +40,4 @@ class ControladorPaciente:
         return pac
 
     def retorna(self):
-        pass
+        self.__continuar = False

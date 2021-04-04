@@ -15,6 +15,10 @@ class Agendamento:
             self.__paciente = paciente
         if isinstance(vacina, Vacina):
             self.__vacina = vacina
+        self.__vacinado_primeira_dose = False
+        self.__vacinado_completamente = False
+        self.__data_segunda_dose = None
+        self.__hora_segunda_dose = None
 
     @property
     def data(self)  -> date:
@@ -60,4 +64,39 @@ class Agendamento:
         if isinstance(vacina, Vacina):
             self.__vacina = vacina
 
- 
+    @property
+    def vacinado_primeira_dose(self) -> bool:
+        return self.__vacinado_primeira_dose
+
+    @vacinado_primeira_dose.setter
+    def vacinado_primeira_dose(self, vacinado: bool):
+        if isinstance(vacinado, bool):
+            self.__vacinado_primeira_dose = vacinado
+
+    @property
+    def vacinado_completamente(self) -> bool:
+        return self.__vacinado_completamente
+
+    @vacinado_completamente.setter
+    def vacinado_completamente(self, vacinado: bool):
+        if isinstance(vacinado, bool):
+            self.__vacinado_completamente = vacinado
+
+    @property
+    def data_segunda_dose(self) -> date:
+        return self.__data_segunda_dose
+
+    @data_segunda_dose.setter
+    def data_segunda_dose(self, data: date):
+        if isinstance(data, date):
+            self.__data_segunda_dose = data
+
+    @property
+    def hora_segunda_dose(self) -> int:
+        return self.__hora_segunda_dose
+
+    @hora_segunda_dose.setter
+    def hora_segunda_dose(self, hora: int):
+        if isinstance(hora, int):
+            self.__hora_segunda_dose = hora
+    

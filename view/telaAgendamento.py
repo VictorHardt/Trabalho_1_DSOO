@@ -15,10 +15,16 @@ class TelaAgendamento(AbstractTela):
         print("2 : Checa Agendamento")
         print("3 : Remove Agendamento")
         print("4 : Altera Agendamento")
+        print("5 : Vacina Primeira Dose")
+        print("6 : Agenda segunda Dose")
+        print("7 : Vacina Segunda Dose")
+        print("8 : Lista Pacientes Que Tomaram Uma Dose")
+        print("9 : Lista Pacientes Que Tomaram Duas Doses")
+        print("10 : Imprime Relatório")
         print("0 : Retornar")
         print("")
 
-        return self.ler_numero([1,2,3,4,0])
+        return self.ler_numero([1,2,3,4,5,6,7,8,9,10,0])
 
     def recebe_dados_agendamento(self):
 
@@ -49,7 +55,7 @@ class TelaAgendamento(AbstractTela):
 
     def mostra_agendamento(self, paciente_nome, enfermeiro_nome, ano, mes, dia, fabricante):
         print("")
-        print("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}!".format(paciente_nome, ano, mes, dia, enfermeiro_nome, fabricante))
+        print("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}!".format(paciente_nome, dia, mes, ano, enfermeiro_nome, fabricante))
         input("")
 
     def nao_ha_agendamento(self, cpf):
@@ -98,11 +104,13 @@ class TelaAgendamento(AbstractTela):
         return self.ler_string("Digite o cpf do novo paciente: ")
 
     def alterado(self):
+
         print("")
         print("Seu agendamento foi alterado com sucesso!")
         input("")
 
     def mostrar_agendamentos(self, agendamentos):
+
         print("")
         print("----- Lista de Agendamentos -----")
         print("")
@@ -111,5 +119,61 @@ class TelaAgendamento(AbstractTela):
                 print(agendamento)
         else:
             print("Não há nenhum agendamento!")
+        input("")
 
-            
+    def vacina_primeira_dose(self, nome, vacina):
+
+        if nome:
+            print(f"{nome} tomou a primeira dose da vacina {vacina}")
+        else:
+            print("O paciente já tomou a primeira dose!")
+        input("")
+        
+    def agendamento_segunda_dose(self, erro, nome=None, dia=None, mes=None, ano=None, hora=None):
+
+        print("")
+        if erro == "nao_tomou_primeira_dose":
+            print("O paciente precisa tomar a primeira dose antes de agendar a segunda!")
+        elif erro == "ja_tomou_segunda_dose":
+            print("O paciente já tomou a segunda dose!")
+        elif erro == "ja_agendado":
+            print("O paciente já agendou a segunda!")
+        else:
+            print(f"A segunda dose de {nome} está agendada para o dia {dia}/{mes}/{ano}, as {hora} horas!")
+        input("")
+
+    def data_invalida_error(self, dia, mes, ano):
+
+        print("")
+        print("Data Inválida!")
+        print(f"Digite uma data a partir de {dia}/{mes}/{ano}!")
+        print("")
+
+    def vacinado_completamente(self, erro, nome=None, vacina=None):
+
+        print("")
+        if erro == "ja_vacinado":
+            print("O paciente já foi vacinado com a segunda dose.")
+        if erro == "sem_agendamento":
+            print("O paciente não possui nenhum agendamento para tomar a segunda dose.")
+        else:
+            print(f"O paciente {nome} tomou a segunda dose da vacina {vacina}!")
+        input("")
+
+    def lista_pacientes(self, pacientes: list):
+
+        print("")
+        for paciente in pacientes:
+            print(paciente)
+            print("")
+        input("")
+
+    def relatorio(self, qtd_vacinas_aplicadas, vacinados_uma_dose, vacinados_duas_doses, pacientes_na_lista_de_espera, pacientes_com_agendamento):
+        print("")
+        print("----- Relatório do Sistema -----")
+        print("")
+        print(f"Quantidade total de vacinas aplicadas: {qtd_vacinas_aplicadas}")
+        print(f"Quantidade de pessoas que tomaram apenas uma dose: {vacinados_uma_dose}")
+        print(f"Quantidade de pessoas que tomaram as duas doses: {vacinados_duas_doses}")
+        print(f"Quantidade de pessoas que esperam na fila de vacinação: {pacientes_na_lista_de_espera}")
+        print(f"Quantidade de pessoas com vacinação agendada: {pacientes_com_agendamento}")

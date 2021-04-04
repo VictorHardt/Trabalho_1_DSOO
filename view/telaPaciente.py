@@ -22,10 +22,18 @@ class TelaPaciente(AbstractTela):
             if idade > 150:
                 print("Digite uma idade válida entre 0 e 150")
         cpf = self.ler_string("CPF: ")
+        endereco = self.recebe_endereco()
 
-        return {"nome": nome, "idade": idade, "CPF": cpf}
+        return {"nome": nome, "idade": idade, "CPF": cpf, "endereco": endereco}
 
     def cpf_duplicado_error(self, cpf):
         print("")
         print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
         input("")
+
+    def recebe_endereco(self):
+        endereco = {}
+        endereco["cidade"] = self.ler_string("Cidade: ")
+        endereco["rua"] = self.ler_string("Rua: ")
+        endereco["numero"] = self.ler_string("Numero: ")
+        return endereco

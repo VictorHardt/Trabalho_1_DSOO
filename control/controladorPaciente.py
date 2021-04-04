@@ -17,8 +17,9 @@ class ControladorPaciente:
 
     def cadastra_paciente(self):
         dados_paciente = self.__tela.recebe_dados_paciente()
+        endereco = dados_paciente["endereco"]
 
-        paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"])
+        paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"], endereco["cidade"], endereco["rua"], endereco["numero"])
 
         duplicado = False
         for i in self.__pacientes:

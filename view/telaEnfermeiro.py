@@ -32,4 +32,43 @@ class TelaEnfermeiro(AbstractTela):
         print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
         input("")
 
+    def altera_dados_enfermeiro(self):
+        print("")
 
+        dados_alteracao = {}
+        dados_alteracao["nome"] = self.ler_string("Digite o nome do enfermeiro: ")
+        print("")
+        dados_alteracao["opcao_escolhida"] = self.ler_numero([1,2], "Digite 1 para alterar o nome, digite 2 para alterar o cpf")
+        return dados_alteracao
+
+    def recebe_nome(self):
+        return self.ler_string("Digite o novo nome: ")
+
+    def recebe_cpf(self):
+        return self.ler_string("Digite o novo cpf: ")
+
+    def alterado(self):
+        print("")
+        print("Os dados do enfermeiro foram atualizados com sucesso!")
+        input("")
+
+    def removido(self, nome):
+        print("")
+        if nome:
+            print(f"O enfermeiro {nome} foi removido com sucesso!")
+        else:
+            print("Não foi possível remover o cadastro do enfermeiro.")
+        input("")
+
+    def mostrar_enfermeiros(self, enfermeiros):
+        print("")
+        if len(enfermeiros) > 0:
+            print("----- Lista de Enfermeiros -----")
+            print("")
+            print("NOME      CPF")
+            for enfermeiro in enfermeiros:
+                print(enfermeiro)
+        else:
+            print("Ainda não há enfermeiros cadastrados.")
+        input("")
+        

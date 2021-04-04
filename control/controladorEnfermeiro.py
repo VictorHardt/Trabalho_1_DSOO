@@ -1,5 +1,6 @@
 from model.enfermeiro import Enfermeiro
 from view.telaEnfermeiro import TelaEnfermeiro
+from model.paciente import Paciente
 
 class ControladorEnfermeiro:
     def __init__(self):
@@ -27,14 +28,15 @@ class ControladorEnfermeiro:
 
         cadastrou = False
         while not cadastrou:
-            dados_paciente = self.__tela.recebe_dados_enfermeiro()
-            nome = dados_paciente["nome"]
-            cpf = dados_paciente["cpf"]
+            dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
+            nome = dados_enfermeiro["nome"]
+            cpf = dados_enfermeiro["cpf"]
             duplicado = False
             i = 0
             while duplicado is not True and i < len(self.__enfermeiros):
                 if self.__enfermeiros[i].cpf == cpf:
                     duplicado = True
+                i += 1
             if duplicado is not True:
                 self.__enfermeiros.append(Enfermeiro(nome, cpf))
                 cadastrou = True
@@ -42,13 +44,46 @@ class ControladorEnfermeiro:
                 self.__tela.cpf_duplicado_error(cpf)
 
     def altera_dados_enfermeiro(self):
-        pass
+        
+        dados_alteracao = self.__tela.altera_dados_enfermeiro()
+        enfermeiro = self.retorna_enfermeiro(dados_alteracao["nome"])
+
+        if enfermeiro:
+            if dados_alteracao["opcao_escolhida"] == 1:
+                enfermeiro.nome = self.__tela.recebe_nome()
+                self.__tela.alterado()
+            else:
+                cpf = self.__tela.recebe_cpf()
+                duplicado = False
+                i = 0
+                while duplicado is not True and i < len(self.__enfermeiros):
+                    if self.__enfermeiros[i].cpf == cpf:
+                        duplicado = True
+                if not duplicado:
+                    enfermeiro.cpf = cpf
+                    self.__tela.alterado()
+                else:
+                    self.__tela.cpf_duplicado_error(cpf)
+
 
     def exlui_enfermeiro(self):
-        pass
+        
+        dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
+        enfermeiro = self.retorna_enfermeiro(dados_enfermeiro["nome"])
+
+        if enfermeiro:
+            self.__enfermeiros.remove(enfermeiro)
+            self.__tela.removido(enfermeiro.nome)
+        else:
+            self.__tela.removido(None)
 
     def lista_enfermeiros(self):
-        pass
+
+        enfermeiros = []
+        for enfermeiro in self.__enfermeiros:
+            string = f"{enfermeiro.nome} - {enfermeiro.cpf}"
+            enfermeiros.append(string)
+        self.__tela.mostrar_enfermeiros(enfermeiros)
 
     def lista_pacientes(self):
         pass
@@ -62,3 +97,14 @@ class ControladorEnfermeiro:
 
     def retorna(self):
         self.__continuar = False
+
+'''    def inclui_paciente(self, paciente: Paciente):
+        if isinstance(paciente, Paciente):
+            i = 0
+            duplicado = False
+            while i < len(self.__pacientes) and duplicado is False:
+                if self.__pacientes[i].nome == paciente.nome:
+                    duplicado == True
+                i += 1
+            if duplicado is not True:
+                self.__pacientes.append(paciente) '''

@@ -101,3 +101,15 @@ class TelaAgendamento(AbstractTela):
         print("")
         print("Seu agendamento foi alterado com sucesso!")
         input("")
+
+    def mostrar_agendamentos(self, agendamentos):
+        print("")
+        print("----- Lista de Agendamentos -----")
+        print("")
+        if len(agendamentos) > 0:
+            for agendamento in agendamentos:
+                print(agendamento)
+        else:
+            print("Não há nenhum agendamento!")
+
+            

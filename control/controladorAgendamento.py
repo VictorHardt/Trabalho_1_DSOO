@@ -33,7 +33,8 @@ class ControladorAgendamento:
             7: self.vacina_segunda_dose,
             8: self.lista_pacientes_uma_dose,
             9: self.lista_pacientes_duas_doses,
-            10: self.relatorio,
+            10: self.lista_pacientes_na_lista_de_espera,
+            11: self.relatorio,
             0: self.retorna
         }
         while self.__continuar:            
@@ -55,9 +56,13 @@ class ControladorAgendamento:
             self.__tela.enfermeiro_nao_existe_error(dados_agendamento["nome_enfermeiro"])
         elif vacina is None:
             self.__tela.sem_estoque_de_vacina_error()
+            if paciente:
+                self.__pacientes_na_lista_de_espera.append(paciente)
         else:
             agendamento = Agendamento(data, hora, enfermeiro, paciente, vacina)
             self.__agendamentos.append(agendamento)
+            if paciente in self.__pacientes_na_lista_de_espera:
+                self.__pacientes_na_lista_de_espera.remove(paciente)
             self.__pacientes_com_agendamento.append(paciente)
             self.__tela.mostra_agendamento(agendamento.paciente.nome, agendamento.enfermeiro.nome, agendamento.data.year, agendamento.data.month, agendamento.data.day, agendamento.vacina.fabricante)
         
@@ -211,6 +216,14 @@ class ControladorAgendamento:
 
         pacientes = []
         for paciente in self.__pacientes_completamente_vacinados:
+            string = (f"Paciente: {paciente.nome} / CPF: {paciente.cpf}")
+            pacientes.append(string)
+        self.__tela.lista_pacientes(pacientes)
+
+    def lista_pacientes_na_lista_de_espera(self):
+
+        pacientes = []
+        for paciente in self.__pacientes_na_lista_de_espera:
             string = (f"Paciente: {paciente.nome} / CPF: {paciente.cpf}")
             pacientes.append(string)
         self.__tela.lista_pacientes(pacientes)

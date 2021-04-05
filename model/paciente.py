@@ -18,3 +18,11 @@ class Paciente(Pessoa):
     def idade(self, idade: int):
         if isinstance(idade, int):
             self.__idade = idade
+
+    @property
+    def endereco(self):
+        return self.__endereco
+
+    @endereco.setter
+    def enfereco(self, cidade: str, rua: str, numero: int):
+        self.__endereco = Endereco(cidade, rua, numero)

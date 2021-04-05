@@ -1,11 +1,13 @@
 from model.vacina import Vacina
 from view.telaVacina import TelaVacina
+from model.localArmazenamento import LocalArmazenamento
 
 class ControladorVacina:
     def __init__(self):
         self.__vacinas = []
         self.__tela = TelaVacina()
         self.__continuar = True
+        self.__locais_armazenamento = []
 
     def abre_tela(self):
         self.__continuar = True
@@ -15,6 +17,7 @@ class ControladorVacina:
             3: self.excluir,
             4: self.alterar,
             5: self.qtd_doses_cada_fabricante,
+            6: self.cadastra_local_armazenamento,
             0: self.retorna}
 
         while self.__continuar:
@@ -28,21 +31,30 @@ class ControladorVacina:
 
         fabricante = dados_vacina["fabricante"]
         qtd_doses = dados_vacina["qtd_doses"]
+        local_armazenamento = dados_vacina["local_armazenamento"]
 
-        vacina_atual = Vacina(fabricante, qtd_doses)
+        local_armz = None
+        for local in self.__locais_armazenamento:
+            if local.local == local_armazenamento:
+                local_armz = local
+
+        vacina_atual = Vacina(fabricante, qtd_doses, local_armz)
         repeticao = 0
         for vacina in self.__vacinas:
             if vacina.fabricante == vacina_atual.fabricante:
                 repeticao += 1
                 return self.__tela.vacina_repetida(fabricante)
-        if repeticao == 0:
+        if repeticao == 0 and local_armz:
             self.__vacinas.append(vacina_atual)
+        elif local_armz is None:
+            self.__tela.local_armazenamento_nao_cadastrado(local_armazenamento)
 
     def add_doses(self):
         dados_vacina = self.__tela.adiconar_doses()
 
         fabricante = dados_vacina["fabricante"]
         qtd_doses = dados_vacina["qtd_doses"]
+
         vacina_atual = Vacina(fabricante, qtd_doses)
         adicionou = False
 
@@ -88,6 +100,20 @@ class ControladorVacina:
     def qtd_doses_cada_fabricante(self):
         for vacina in self.__vacinas:
             self.__tela.mostrar_vacinas({"fabricante": vacina.fabricante, "quantidade de doses": vacina.qtd_doses})
+
+    def cadastra_local_armazenamento(self):
+        dados_armazenamento = self.__tela.recebe_dados_amazenamento()
+        local_armazenamento = LocalArmazenamento(dados_armazenamento["local_armazenamento"], dados_armazenamento["temperatura"])
+        
+        duplicado = False
+        for local_armz in self.__locais_armazenamento:
+            if local_armazenamento.local == local_armz.local:
+                duplicado = True
+        if duplicado:
+            self.__tela.local_armazenamento_ja_cadastrado(local_armazenamento.local)
+        else:
+            self.__locais_armazenamento.append(local_armazenamento)
+
 
     def retorna_vacina_para_agendamento(self):
 

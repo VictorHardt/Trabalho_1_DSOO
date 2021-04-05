@@ -41,7 +41,7 @@ class TelaPaciente(AbstractTela):
         endereco = {}
         endereco["cidade"] = self.ler_string("Cidade: ")
         endereco["rua"] = self.ler_string("Rua: ")
-        endereco["numero"] = self.ler_string("Numero: ")
+        endereco["numero"] = self.ler_numero(None, "Numero: ")
         return endereco
 
     def alterar(self):
@@ -66,6 +66,10 @@ class TelaPaciente(AbstractTela):
         print("Nome: ", dados_paciente["nome"])
         print("CPF: ", dados_paciente["CPF"])
         print("Idade: ", dados_paciente["idade"])
+        print("Cidade: ", dados_paciente["cidade"])
+        print("Rua: ", dados_paciente["rua"])
+        print("Número: ", dados_paciente["numero"])
+
         input("")
 
 

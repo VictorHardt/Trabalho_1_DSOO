@@ -20,11 +20,12 @@ class TelaAgendamento(AbstractTela):
         print("7 : Vacina Segunda Dose")
         print("8 : Lista Pacientes Que Tomaram Uma Dose")
         print("9 : Lista Pacientes Que Tomaram Duas Doses")
-        print("10 : Imprime Relatório")
+        print("10 : Lista Pacientes Na Fila de Espera")
+        print("11 : Imprime Relatório")
         print("0 : Retornar")
         print("")
 
-        return self.ler_numero([1,2,3,4,5,6,7,8,9,10,0])
+        return self.ler_numero([1,2,3,4,5,6,7,8,9,10,11,0])
 
     def recebe_dados_agendamento(self):
 
@@ -50,7 +51,7 @@ class TelaAgendamento(AbstractTela):
 
     def sem_estoque_de_vacina_error(self):
         print("")
-        print("Não há doses suficientes de vacina para o agendamento.")
+        print("Não há doses suficientes de vacina para o agendamento, o paciente foi movido para a fila de espera.")
         input("")
 
     def mostra_agendamento(self, paciente_nome, enfermeiro_nome, ano, mes, dia, fabricante):

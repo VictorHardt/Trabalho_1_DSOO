@@ -1,5 +1,6 @@
 from model.paciente import Paciente
 from view.telaPaciente import TelaPaciente
+from model.endereco import Endereco
 
 class ControladorPaciente:
     def __init__(self):
@@ -9,6 +10,7 @@ class ControladorPaciente:
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente, 3: self.exclui_paciente, 4:self.lista_pacientes, 0: self.retorna}
+        self.__continuar = True        
 
         while self.__continuar:
             opcao_escolhida = self.__tela.mostrar_menu()
@@ -69,8 +71,9 @@ class ControladorPaciente:
 
     def lista_pacientes(self):
         for paciente in self.__pacientes:
-            self.__tela.listar_pacientes({"idade": paciente.idade, "nome": paciente.idade, "CPF": paciente.cpf})
-            #, "cidade": paciente.cidade, "rua": paciente.rua, "numero": paciente.numero
+            self.__tela.listar_pacientes({"idade": paciente.idade, "nome": paciente.nome, "CPF": paciente.cpf,
+                                             "cidade": paciente.endereco.cidade, "rua": paciente.endereco.rua, 
+                                             "numero": paciente.endereco.numero})
 
     def retorna(self):
         self.__continuar = False

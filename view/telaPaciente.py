@@ -49,10 +49,13 @@ class TelaPaciente(AbstractTela):
         nome = self.ler_string("Novo nome: ")
         idade = 160
         while idade > 150:
-            idade = self.ler_numero(None, "Idade: ")
+            idade = self.ler_numero(None, "Nova Idade: ")
             if idade > 150:
                 print("Digite uma idade válida entre 0 e 150")
-        endereco = self.recebe_endereco()
+        endereco = {}
+        endereco["cidade"] = self.ler_string("Nova Cidade: ")
+        endereco["rua"] = self.ler_string("Nova Rua: ")
+        endereco["numero"] = self.ler_numero(None, "Novo Número: ")
 
         return {"nome": nome, "idade": idade, "CPF": cpf, "endereco": endereco}
 

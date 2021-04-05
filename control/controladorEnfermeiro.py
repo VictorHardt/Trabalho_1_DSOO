@@ -85,9 +85,6 @@ class ControladorEnfermeiro:
             enfermeiros.append(string)
         self.__tela.mostrar_enfermeiros(enfermeiros)
 
-    def lista_pacientes(self):
-        pass
-
     def retorna_enfermeiro(self, nome_enfermeiro:str) -> Enfermeiro:
         enf = None
         for enfermeiro in self.__enfermeiros:
@@ -95,16 +92,22 @@ class ControladorEnfermeiro:
                 enf = enfermeiro
         return enf
 
+    def add_paciente(self, paciente: Paciente, enfermeiro: Enfermeiro):
+
+        i = 0
+        duplicado = False
+        pacientes = enfermeiro.pacientes
+        while i < len(pacientes) and duplicado is False:
+            if pacientes[i].nome == paciente.nome:
+                duplicado == True
+            i += 1
+        if duplicado is not True:
+            enfermeiro.pacientes.append(paciente)
+
+    def lista_pacientes(self):
+        enfermeiro = self.retorna_enfermeiro(self.__tela.recebe_nome())
+        for paciente in enfermeiro.pacientes:
+            self.__tela.mostra_paciente(f"Paciente {paciente.nome} - Cpf {paciente.cpf}")
+
     def retorna(self):
         self.__continuar = False
-
-'''    def inclui_paciente(self, paciente: Paciente):
-        if isinstance(paciente, Paciente):
-            i = 0
-            duplicado = False
-            while i < len(self.__pacientes) and duplicado is False:
-                if self.__pacientes[i].nome == paciente.nome:
-                    duplicado == True
-                i += 1
-            if duplicado is not True:
-                self.__pacientes.append(paciente) '''

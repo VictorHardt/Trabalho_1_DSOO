@@ -52,6 +52,11 @@ class TelaEnfermeiro(AbstractTela):
         print("Os dados do enfermeiro foram atualizados com sucesso!")
         input("")
 
+    def mostra_paciente(self, msg):
+        print("")
+        print(msg)
+        input("")
+
     def removido(self, nome):
         print("")
         if nome:

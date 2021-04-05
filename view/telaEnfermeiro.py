@@ -42,7 +42,7 @@ class TelaEnfermeiro(AbstractTela):
         return dados_alteracao
 
     def recebe_nome(self):
-        return self.ler_string("Digite o novo nome: ")
+        return self.ler_string("Digite o nome do enfermeiro: ")
 
     def recebe_cpf(self):
         return self.ler_string("Digite o novo cpf: ")

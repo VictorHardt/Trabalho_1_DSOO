@@ -43,6 +43,9 @@ class ControladorPaciente:
             if pac.cpf == paciente_atual.cpf:
                 pac.idade = paciente_atual.idade
                 pac.nome = paciente_atual.nome
+                pac.endereco.cidade = paciente_atual.endereco.cidade
+                pac.endereco.rua = paciente_atual.endereco.rua
+                pac.endereco.numero = paciente_atual.endereco.numero
                 alterou = True
         if alterou is False:
             self.__tela.cpf_nao_existe(paciente_atual.cpf)

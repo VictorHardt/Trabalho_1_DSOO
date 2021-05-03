@@ -13,11 +13,10 @@ class TelaEnfermeiro(AbstractTela):
         print("2 : Altera Dados do Enfermeiro")
         print("3 : Exclui Enfermeiro")
         print("4 : Lista Enfermeiros")
-        print("5 : Lista Pacientes")
         print("0 : Retornar")
         print("")
 
-        return self.ler_numero([1,2,3,4,5,0])
+        return self.ler_numero([1,2,3,4,0])
     
     def recebe_dados_enfermeiro(self):
 

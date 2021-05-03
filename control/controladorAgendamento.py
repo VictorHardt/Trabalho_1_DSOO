@@ -150,7 +150,6 @@ class ControladorAgendamento:
 
         if agendamento and not agendamento.vacinado_primeira_dose:
             agendamento.vacinado_primeira_dose = True
-            self.__controlador_enfermeiro.add_paciente(agendamento.paciente, agendamento.enfermeiro)
             self.__pacientes_que_tomaram_uma_dose.append(agendamento.paciente)
             self.__pacientes_com_agendamento.remove(agendamento.paciente)
             self.__tela.vacina_primeira_dose(agendamento.paciente.nome, agendamento.vacina.fabricante)

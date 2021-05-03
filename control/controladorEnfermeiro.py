@@ -1,11 +1,13 @@
-from model.enfermeiro import Enfermeiro
+
 from view.telaEnfermeiro import TelaEnfermeiro
+from model.enfermeiro import Enfermeiro
 from model.paciente import Paciente
+from persistence.enfermeiroDAO import EnfermeiroDAO
 
 class ControladorEnfermeiro:
     def __init__(self):
         self.__tela = TelaEnfermeiro()
-        self.__enfermeiros = []
+        self.__dao = EnfermeiroDAO()
         self.__continuar = True
         
     def abre_tela(self):
@@ -30,14 +32,9 @@ class ControladorEnfermeiro:
             dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
             nome = dados_enfermeiro["nome"]
             cpf = dados_enfermeiro["cpf"]
-            duplicado = False
-            i = 0
-            while duplicado is not True and i < len(self.__enfermeiros):
-                if self.__enfermeiros[i].cpf == cpf:
-                    duplicado = True
-                i += 1
-            if duplicado is not True:
-                self.__enfermeiros.append(Enfermeiro(nome, cpf))
+            enfermeiro = self.__dao.get(cpf)
+            if enfermeiro is None:
+                self.__dao.add(Enfermeiro(nome, cpf))
                 cadastrou = True
             else:
                 self.__tela.cpf_duplicado_error(cpf)
@@ -45,7 +42,7 @@ class ControladorEnfermeiro:
     def altera_dados_enfermeiro(self):
         
         dados_alteracao = self.__tela.altera_dados_enfermeiro()
-        enfermeiro = self.retorna_enfermeiro(dados_alteracao["nome"])
+        enfermeiro = self.dao.get(dados_alteracao["cpf"])
 
         if enfermeiro:
             if dados_alteracao["opcao_escolhida"] == 1:
@@ -68,31 +65,16 @@ class ControladorEnfermeiro:
     def exlui_enfermeiro(self):
         
         dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
-        enfermeiro = self.retorna_enfermeiro(dados_enfermeiro["nome"])
-
-        if enfermeiro:
-            self.__enfermeiros.remove(enfermeiro)
-            self.__tela.removido(enfermeiro.nome)
-        else:
-            self.__tela.removido(None)
+        self.__dao.remove(dados_enfermeiro["cpf"])
 
     def lista_enfermeiros(self):
 
         enfermeiros = []
-        for enfermeiro in self.__enfermeiros:
+        lista_enfermeiros = self.__dao.get_all()
+        for enfermeiro in lista_enfermeiros:
             string = f"{enfermeiro.nome} - {enfermeiro.cpf}"
             enfermeiros.append(string)
         self.__tela.mostrar_enfermeiros(enfermeiros)
-
-    def lista_pacientes(self):
-        pass
-
-    def retorna_enfermeiro(self, nome_enfermeiro:str) -> Enfermeiro:
-        enf = None
-        for enfermeiro in self.__enfermeiros:
-            if enfermeiro.nome == nome_enfermeiro:
-                enf = enfermeiro
-        return enf
 
     def retorna(self):
         self.__continuar = False

@@ -97,10 +97,13 @@ class ControladorVacina:
 
         for vacina in self.__dao.get_all():
             if vacina.fabricante == vacina_atual.fabricante:
-                vacina.qtd_doses = vacina_atual.qtd_doses
                 alterou = True
         if alterou is False:
             self.__tela.vacina_nao_existe(fabricante)
+
+        if alterou is True:
+            self.__dao.remove(vacina.fabricante)
+            self.__dao.add(Vacina(fabricante, qtd_doses))
 
     def qtd_doses_cada_fabricante(self):
         for vacina in self.__dao.get_all():

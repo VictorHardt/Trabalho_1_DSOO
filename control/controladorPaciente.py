@@ -1,10 +1,11 @@
 from model.paciente import Paciente
 from view.telaPaciente import TelaPaciente
 from model.endereco import Endereco
+from persistence.pacienteDAO import PacienteDAO
 
 class ControladorPaciente:
     def __init__(self):
-        self.__pacientes = []
+        self.__dao_pacientes = PacienteDAO()
         self.__tela = TelaPaciente()
         self.__continuar = True
 
@@ -24,56 +25,66 @@ class ControladorPaciente:
         paciente = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"], endereco["cidade"], endereco["rua"], endereco["numero"])
 
         duplicado = False
-        for i in self.__pacientes:
+        for i in self.__dao_pacientes.get_all():
             if i.cpf == paciente.cpf:
                 self.__tela.cpf_duplicado_error(paciente.cpf)
                 duplicado = True
         if not duplicado:
-            self.__pacientes.append(paciente)
+            self.__dao_pacientes.add(paciente)
 
     def altera_dados_paciente(self):
         dados_paciente = self.__tela.alterar()
-        endereco = dados_paciente["endereco"]
 
-        paciente_atual = Paciente(dados_paciente["idade"], dados_paciente["nome"], dados_paciente["CPF"], endereco["cidade"],
-                            endereco["rua"], endereco["numero"])
+        idade = dados_paciente["idade"]
+        nome = dados_paciente["nome"]
+        CPF = dados_paciente["CPF"]
+        endereco = dados_paciente["endereco"]
+        cidade = endereco["cidade"]
+        rua = endereco["rua"]
+        numero = endereco["numero"]
+
+        paciente_atual = Paciente(idade, nome, CPF, cidade, rua, numero)
+
         alterou = False
 
-        for pac in self.__pacientes:
+        for pac in self.__dao_pacientes.get_all():
             if pac.cpf == paciente_atual.cpf:
-                pac.idade = paciente_atual.idade
-                pac.nome = paciente_atual.nome
-                pac.endereco.cidade = paciente_atual.endereco.cidade
-                pac.endereco.rua = paciente_atual.endereco.rua
-                pac.endereco.numero = paciente_atual.endereco.numero
                 alterou = True
         if alterou is False:
             self.__tela.cpf_nao_existe(paciente_atual.cpf)
+
+        if alterou is True:
+            self.__dao_pacientes.remove(pac.cpf)
+            self.__dao_pacientes.add(Paciente(idade, nome, CPF, cidade, rua, numero))
 
 
     def exclui_paciente(self):
         dados_paciente = self.__tela.excluir_paciente()
         cpf_atual = dados_paciente["CPF"]
         excluiu = False
+        excluiu_paciente = False
 
-        for paciente in self.__pacientes:
+        for paciente in self.__dao_pacientes.get_all():
             if paciente.cpf == cpf_atual:
-                self.__pacientes.remove(paciente)
+                excluiu_paciente = True
             excluiu = True
 
         if excluiu is False:
             self.__tela.cpf_nao_existe(cpf_atual)
 
+        if excluiu_paciente is True:
+            self.__dao_pacientes.remove(dados_paciente["CPF"])
+
 
     def retorna_paciente(self, cpf:str) -> Paciente:
         pac = None
-        for paciente in self.__pacientes:
+        for paciente in self.__dao_pacientes.get_all():
             if paciente.cpf == cpf:
                 pac = paciente
         return pac
 
     def lista_pacientes(self):
-        for paciente in self.__pacientes:
+        for paciente in self.__dao_pacientes.get_all():
             self.__tela.listar_pacientes({"idade": paciente.idade, "nome": paciente.nome, "CPF": paciente.cpf,
                                              "cidade": paciente.endereco.cidade, "rua": paciente.endereco.rua, 
                                              "numero": paciente.endereco.numero})

@@ -24,5 +24,5 @@ class Paciente(Pessoa):
         return self.__endereco
 
     @endereco.setter
-    def enfereco(self, cidade: str, rua: str, numero: int):
+    def endereco(self, cidade: str, rua: str, numero: int):
         self.__endereco = Endereco(cidade, rua, numero)

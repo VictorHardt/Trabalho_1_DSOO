@@ -29,6 +29,7 @@ class TelaEnfermeiro(AbstractTela):
         for valor in valores.values():
             if valor:
                 cpf = enfermeiros[i][1]
+        self.close()
         return (int(botao), cpf)
 
     def popup(self,msg):
@@ -37,4 +38,6 @@ class TelaEnfermeiro(AbstractTela):
     def recebe_dados_enfermeiro(self):
         return self.__tela_dados_pessoa.recebe_dados()
 
+    def close(self):
+        self.__window.Close()
         

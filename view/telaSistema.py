@@ -19,7 +19,8 @@ class TelaSistema(AbstractTela):
         botao, valores = self.__window.Read()
         if botao is None:
             botao = 0
+        self.close()
         return int(botao)
 
     def close(self):
-        self.__window.close()
+        self.__window.Close()

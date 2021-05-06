@@ -34,4 +34,3 @@ class AbstractTela(ABC):
                 return string
             except ValueError:
                 print("Digite algo válido!")
-                

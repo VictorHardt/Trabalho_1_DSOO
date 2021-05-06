@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-class TelaDadosPessoa:
+class TelaDadosPessoa():
     def __init__(self):
         self.__window = None
         self.init_components()
@@ -19,10 +19,17 @@ class TelaDadosPessoa:
         while continuar:
             try:
                 botao, valores = self.__window.Read()
-                if len(valores["nome"]) > 0 and len(valores["cpf"]) > 0:
+                if botao is None or botao is "Cancel":
+                    valores = 0
+                    continuar = False
+                elif len(valores["nome"]) > 0 and len(valores["cpf"]) > 0:
                     valores["nome"].strip().capitalize()
                     valores["cpf"].strip().capitalize()
                     continuar = False
             except Exception:
                 continuar = True
+        self.close()
         return valores
+
+    def close(self):
+        self.__window.Close()

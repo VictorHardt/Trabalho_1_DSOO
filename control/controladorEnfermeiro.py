@@ -1,8 +1,8 @@
-
 from view.telaEnfermeiro import TelaEnfermeiro
 from model.enfermeiro import Enfermeiro
 from model.paciente import Paciente
 from persistence.enfermeiroDAO import EnfermeiroDAO
+from exception.cpfJahCadastradoException import CpfJahCadastradoException
 
 class ControladorEnfermeiro:
     def __init__(self):
@@ -34,33 +34,42 @@ class ControladorEnfermeiro:
 
     def cadastra_enfermeiro(self):
 
-        cadastrou = False
-        while not cadastrou:
-            dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
-            nome = dados_enfermeiro["nome"]
-            cpf = dados_enfermeiro["cpf"]
-            enfermeiro = self.__dao.get(cpf)
-            if enfermeiro is None:
-                self.__dao.add(Enfermeiro(nome, cpf))
-                cadastrou = True
-                self.__tela.popup("Enfermeiro cadastrado com sucesso!")
-            else:
-                self.__tela.popup("Cpf já cadastrado")
+        dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
+        if dados_enfermeiro is not 0:
+            try:
+                nome = dados_enfermeiro["nome"]
+                cpf = dados_enfermeiro["cpf"]
+                enfermeiro = self.__dao.get(cpf)
+                if enfermeiro is None:
+                    self.__dao.add(Enfermeiro(nome, cpf))
+                    cadastrou = True
+                    self.__tela.popup("Enfermeiro cadastrado com sucesso!")
+                else:
+                    raise CpfJahCadastradoException
+            except CpfJahCadastradoException:
+                pass
+        else:
+            pass
 
     def altera_dados_enfermeiro(self):
         
         dados_alteracao = self.__tela.recebe_dados_enfermeiro()
 
-        duplicado = False
-        if self.__dao.get(dados_alteracao["cpf"]) is not None:
-            duplicado = True
-        if not duplicado:
-            self.__enfermeiro.cpf = dados_alteracao["cpf"]
-            self.__enfermeiro.nome = dados_alteracao["nome"]
-            self.__tela.popup("Alterado com sucesso!")
-            self.__dao.update()
-        elif duplicado:
-            self.__tela.popup("Esse cpf já foi cadastrado!")
+        if dados_alteracao is not 0:
+            try:
+                duplicado = False
+                if self.__dao.get(dados_alteracao["cpf"]) is not None:
+                    duplicado = True
+                    raise CpfJahCadastradoException
+                if not duplicado:
+                    self.__enfermeiro.cpf = dados_alteracao["cpf"]
+                    self.__enfermeiro.nome = dados_alteracao["nome"]
+                    self.__tela.popup("Alterado com sucesso!")
+                    self.__dao.update()
+            except CpfJahCadastradoException:
+                pass
+        else:
+            pass
 
     def exlui_enfermeiro(self):
 

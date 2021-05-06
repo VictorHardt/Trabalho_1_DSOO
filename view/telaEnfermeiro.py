@@ -1,78 +1,40 @@
+import PySimpleGUI as sg
 from view.abstractTela import AbstractTela
+from view.telaDadosPessoa import TelaDadosPessoa
 
 class TelaEnfermeiro(AbstractTela):
+
     def __init__(self):
-        pass
+        self.__windown = None
+        self.init_components()
+        self.__tela_dados_pessoa = TelaDadosPessoa()
 
-    def mostrar_menu(self):
+    def init_components(self, enfermeiros=[]):
+
+        layout = []
+        for i in range(len(enfermeiros)):
+            linha = [sg.Radio("{} - {}".format(enfermeiros[i][0], enfermeiros[i][1]), "enfermeiro", size=(10, 1))]
+            layout.append(linha)
+        layout.append([sg.Button("Adicionar Enfermeiro", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Excluir", key="3")])
+        self.__window = sg.Window("Enfermeiros").Layout(layout)
+
+    def mostrar_menu(self, enfermeiros):
         
-        print("")
-        print("------------ Enfermeiro ------------")
-        print("")
-        print("1 : Cadastra Enfermeiro")
-        print("2 : Altera Dados do Enfermeiro")
-        print("3 : Exclui Enfermeiro")
-        print("4 : Lista Enfermeiros")
-        print("0 : Retornar")
-        print("")
+        self.init_components(enfermeiros)
+        botao, valores = self.__window.Read()
+        if botao is None:
+            botao = 0
+        i = 0
+        cpf = None
+        for valor in valores.values():
+            if valor:
+                cpf = enfermeiros[i][1]
+        return (int(botao), cpf)
 
-        return self.ler_numero([1,2,3,4,0])
-    
+    def popup(self,msg):
+        sg.Popup("","{}".format(msg))
+
     def recebe_dados_enfermeiro(self):
+        return self.__tela_dados_pessoa.recebe_dados()
 
-        dados_enfermeiro = {}
-        dados_enfermeiro["nome"] = self.ler_string("Digite o nome do enfermeiro: ")
-        dados_enfermeiro["cpf"] = self.ler_string("Digite o cpf do enfermeiro: ")
-        return dados_enfermeiro
-
-    def cpf_duplicado_error(self, cpf):
-        
-        print("")
-        print("O enfermeiro com cpf {} já está na lista de enfermeiros! ".format(cpf))
-        input("")
-
-    def altera_dados_enfermeiro(self):
-        print("")
-
-        dados_alteracao = {}
-        dados_alteracao["nome"] = self.ler_string("Digite o nome do enfermeiro: ")
-        print("")
-        dados_alteracao["opcao_escolhida"] = self.ler_numero([1,2], "Digite 1 para alterar o nome, digite 2 para alterar o cpf")
-        return dados_alteracao
-
-    def recebe_nome(self):
-        return self.ler_string("Digite o nome do enfermeiro: ")
-
-    def recebe_cpf(self):
-        return self.ler_string("Digite o novo cpf: ")
-
-    def alterado(self):
-        print("")
-        print("Os dados do enfermeiro foram atualizados com sucesso!")
-        input("")
-
-    def mostra_paciente(self, msg):
-        print("")
-        print(msg)
-        input("")
-
-    def removido(self, nome):
-        print("")
-        if nome:
-            print(f"O enfermeiro {nome} foi removido com sucesso!")
-        else:
-            print("Não foi possível remover o cadastro do enfermeiro.")
-        input("")
-
-    def mostrar_enfermeiros(self, enfermeiros):
-        print("")
-        if len(enfermeiros) > 0:
-            print("----- Lista de Enfermeiros -----")
-            print("")
-            print("NOME      CPF")
-            for enfermeiro in enfermeiros:
-                print(enfermeiro)
-        else:
-            print("Ainda não há enfermeiros cadastrados.")
-        input("")
         

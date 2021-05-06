@@ -9,6 +9,7 @@ class ControladorEnfermeiro:
         self.__tela = TelaEnfermeiro()
         self.__dao = EnfermeiroDAO()
         self.__continuar = True
+        self.__enfermeiro = None
         
     def abre_tela(self):
 
@@ -17,12 +18,18 @@ class ControladorEnfermeiro:
             1: self.cadastra_enfermeiro,
             2: self.altera_dados_enfermeiro,
             3: self.exlui_enfermeiro, 
-            4: self.lista_enfermeiros,
-            0: self.retorna
-        }
-        while self.__continuar:            
-            opcao_escolhida = self.__tela.mostrar_menu()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            0: self.retorna}
+
+        while self.__continuar:
+            enfermeiros = self.__dao.get_all()
+            tuplas = []
+            for enfermeiro in enfermeiros:
+                tuplas.append((enfermeiro.nome, enfermeiro.cpf))
+            opcao_escolhida = self.__tela.mostrar_menu(tuplas)
+            cpf = opcao_escolhida[1]
+            if cpf:
+                self.__enfermeiro = self.__dao.get(cpf)
+            funcao_escolhida = lista_opcoes[opcao_escolhida[0]]
             funcao_escolhida()
 
     def cadastra_enfermeiro(self):
@@ -36,45 +43,28 @@ class ControladorEnfermeiro:
             if enfermeiro is None:
                 self.__dao.add(Enfermeiro(nome, cpf))
                 cadastrou = True
+                self.__tela.popup("Enfermeiro cadastrado com sucesso!")
             else:
-                self.__tela.cpf_duplicado_error(cpf)
+                self.__tela.popup("Cpf já cadastrado")
 
     def altera_dados_enfermeiro(self):
         
-        dados_alteracao = self.__tela.altera_dados_enfermeiro()
-        enfermeiro = self.dao.get(dados_alteracao["cpf"])
+        dados_alteracao = self.__tela.recebe_dados_enfermeiro()
 
-        if enfermeiro:
-            if dados_alteracao["opcao_escolhida"] == 1:
-                enfermeiro.nome = self.__tela.recebe_nome()
-                self.__tela.alterado()
-            else:
-                cpf = self.__tela.recebe_cpf()
-                duplicado = False
-                i = 0
-                while duplicado is not True and i < len(self.__enfermeiros):
-                    if self.__enfermeiros[i].cpf == cpf:
-                        duplicado = True
-                if not duplicado:
-                    enfermeiro.cpf = cpf
-                    self.__tela.alterado()
-                else:
-                    self.__tela.cpf_duplicado_error(cpf)
-
+        duplicado = False
+        if self.__dao.get(dados_alteracao["cpf"]) is not None:
+            duplicado = True
+        if not duplicado:
+            self.__enfermeiro.cpf = dados_alteracao["cpf"]
+            self.__enfermeiro.nome = dados_alteracao["nome"]
+            self.__tela.popup("Alterado com sucesso!")
+            self.__dao.update()
+        elif duplicado:
+            self.__tela.popup("Esse cpf já foi cadastrado!")
 
     def exlui_enfermeiro(self):
-        
-        dados_enfermeiro = self.__tela.recebe_dados_enfermeiro()
-        self.__dao.remove(dados_enfermeiro["cpf"])
 
-    def lista_enfermeiros(self):
-
-        enfermeiros = []
-        lista_enfermeiros = self.__dao.get_all()
-        for enfermeiro in lista_enfermeiros:
-            string = f"{enfermeiro.nome} - {enfermeiro.cpf}"
-            enfermeiros.append(string)
-        self.__tela.mostrar_enfermeiros(enfermeiros)
+        self.__dao.remove(self.__enfermeiro.cpf)
 
     def retorna(self):
         self.__continuar = False

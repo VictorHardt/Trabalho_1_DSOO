@@ -17,10 +17,10 @@ class Pessoa(ABC):
             self.__nome = nome
 
     @property
-    def cpf(self) -> int:
+    def cpf(self) -> str:
         return self.__cpf
 
     @cpf.setter
-    def cpf(self, cpf: int):
-        if isinstance(cpf, int):
+    def cpf(self, cpf: str):
+        if isinstance(cpf, str):
             self.__cpf = cpf

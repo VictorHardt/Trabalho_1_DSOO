@@ -72,7 +72,6 @@ class ControladorEnfermeiro:
             pass
 
     def exlui_enfermeiro(self):
-
         self.__dao.remove(self.__enfermeiro.cpf)
 
     def retorna(self):

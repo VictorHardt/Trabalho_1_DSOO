@@ -1,81 +1,45 @@
 from view.abstractTela import AbstractTela
+import PySimpleGUI as sg
+from view.telaDadosPessoa import TelaDadosPessoa
+from view.telaEndereço import TelaDadosEndereco
 
 class TelaPaciente(AbstractTela):
+
     def __init__(self):
-        pass
+        self.__window = None
+        self.init_components()
+        self.__tela_dados_pessoa = TelaDadosPessoa()
+        self.__tela_dados_endereco = TelaDadosEndereco()
 
-    def mostrar_menu(self):
-        print("-------- Paciente ----------")
-        print("Escolha a opcao")
-        print("1 - Cadastrar paciente")
-        print("2 - Alterar dados do paciente")
-        print("3 - Excluir paciente")
-        print("4 - Lista pacientes")
-        print("0 - Retornar")
+    def init_components(self, pacientes=[]):
+        layout = []
+        for i in range(len(pacientes)):
+            linha = [sg.Radio("{} - {}".format(pacientes[i][0], pacientes[i][1]), "paciente", size=(10, 1))]
+            layout.append(linha)
+        layout.append([sg.Button("Adicionar Paciente", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Excluir", key="3")])
+        self.__window = sg.Window("Pacientes").Layout(layout)
 
-        return self.ler_numero([1,2,3,4,0])
+    def mostrar_menu(self, pacientes):
+        print(pacientes)
+        self.init_components(pacientes)
+        botao, valores = self.__window.Read()
+        if botao is None:
+            botao = 0
+        cpf = None
+        for i in range(len(valores.values())):
+            if valores[i]:
+                cpf = pacientes[i][1]
+        self.close()
+        return (int(botao), cpf)
+
+    def popup(self,msg):
+        sg.Popup("","{}".format(msg))
 
     def recebe_dados_paciente(self):
-        nome = self.ler_string("Nome: ")
-        idade = 160
-        while idade > 150:
-            idade = self.ler_numero(None, "Idade: ")
-            if idade > 150:
-                print("Digite uma idade válida entre 0 e 150")
-        cpf = self.ler_string("CPF: ")
-        endereco = self.recebe_endereco()
+        return self.__tela_dados_pessoa.recebe_dados()
 
-        return {"nome": nome, "idade": idade, "CPF": cpf, "endereco": endereco}
+    def recebe_endereco_paciente(self):
+        return  self.__tela_dados_endereco.recebe_dados()
 
-    def cpf_duplicado_error(self, cpf):
-        print("")
-        print("O paciente com cpf {} já está na lista de pacientes! ".format(cpf))
-        input("")
-
-    def cpf_nao_existe(self, cpf):
-        print("")
-        print("O paciente com cpf {} não está na lista de pacientes! ".format(cpf))
-        input("")
-
-    def recebe_endereco(self):
-        endereco = {}
-        endereco["cidade"] = self.ler_string("Cidade: ")
-        endereco["rua"] = self.ler_string("Rua: ")
-        endereco["numero"] = self.ler_numero(None, "Numero: ")
-        return endereco
-
-    def alterar(self):
-        cpf = self.ler_string("Digite o CPF do paciente a ser alterado: ")
-        nome = self.ler_string("Novo nome: ")
-        idade = 160
-        while idade > 150:
-            idade = self.ler_numero(None, "Nova Idade: ")
-            if idade > 150:
-                print("Digite uma idade válida entre 0 e 150")
-        endereco = {}
-        endereco["cidade"] = self.ler_string("Nova Cidade: ")
-        endereco["rua"] = self.ler_string("Nova Rua: ")
-        endereco["numero"] = self.ler_numero(None, "Novo Número: ")
-
-        return {"nome": nome, "idade": idade, "CPF": cpf, "endereco": endereco}
-
-    def excluir_paciente(self):
-        cpf = self.ler_string("Digite o CPF do paciente a ser excluído: ")
-
-        return {"CPF": cpf}
-
-    def listar_pacientes(self, dados_paciente):
-        print("")
-        print("Nome: ", dados_paciente["nome"])
-        print("CPF: ", dados_paciente["CPF"])
-        print("Idade: ", dados_paciente["idade"])
-        print("Cidade: ", dados_paciente["cidade"])
-        print("Rua: ", dados_paciente["rua"])
-        print("Número: ", dados_paciente["numero"])
-
-        input("")
-
-
-        #print("Cidade: ", dados_paciente["cidade"])
-        #print("Rua: ", dados_paciente["rua"])
-        #print("Número: ", dados_paciente["numero"])
+    def close(self):
+        self.__window.Close()

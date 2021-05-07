@@ -24,10 +24,9 @@ class TelaEnfermeiro(AbstractTela):
         botao, valores = self.__window.Read()
         if botao is None:
             botao = 0
-        i = 0
         cpf = None
-        for valor in valores.values():
-            if valor:
+        for i in range(len(valores.values())):
+            if valores[i]:
                 cpf = enfermeiros[i][1]
         self.close()
         return (int(botao), cpf)

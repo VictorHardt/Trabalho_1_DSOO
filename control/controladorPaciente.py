@@ -13,13 +13,14 @@ class ControladorPaciente:
 
     def abre_tela(self):
         self.__continuar = True
-        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente, 3: self.exclui_paciente, 4:self.lista_pacientes, 0: self.retorna}
+        lista_opcoes = {1: self.cadastra_paciente, 2: self.altera_dados_paciente, 3: self.exclui_paciente, 0: self.retorna}
 
         while self.__continuar:
             pacientes = self.__dao_pacientes.get_all()
             tuplas = []
             for paciente in pacientes:
-                tuplas.append((paciente.nome, paciente.cpf))
+                print(paciente)
+                tuplas.append((paciente.idade, paciente.nome, paciente.cpf))
             opcao_escolhida = self.__tela.mostrar_menu(tuplas)
             cpf = opcao_escolhida[1]
             if cpf:
@@ -43,7 +44,7 @@ class ControladorPaciente:
                 paciente = self.__dao_pacientes.get(cpf)
 
                 if paciente is None:
-                    self.__dao_pacientes.add(Paciente(nome,cpf,idade,cidade,rua,numero))
+                    self.__dao_pacientes.add(Paciente(idade, nome, cpf, cidade, rua, numero))
                     self.__tela.popup("Paciente cadastrado com sucesso!")
                 else:
                     raise CpfJahCadastradoException
@@ -80,12 +81,6 @@ class ControladorPaciente:
             if paciente.cpf == cpf:
                 pac = paciente
         return pac
-
-    def lista_pacientes(self):
-        for paciente in self.__dao_pacientes.get_all():
-            self.__tela.listar_pacientes({"idade": paciente.idade, "nome": paciente.nome, "CPF": paciente.cpf,
-                                             "cidade": paciente.endereco.cidade, "rua": paciente.endereco.rua, 
-                                             "numero": paciente.endereco.numero})
 
     def retorna(self):
         self.__continuar = False

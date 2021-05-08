@@ -1,78 +1,46 @@
 from view.abstractTela import AbstractTela
+import PySimpleGUI as sg
+from view.telaDadosVacina import TelaDadosVacina
+from view.telaLocalArmazenamento import TelaLocalArmazenamento
 
 class TelaVacina(AbstractTela):
+
     def __init__(self):
-        pass
+        self.__window = None
+        self.init_components()
+        self.__tela_dados_vacina = TelaDadosVacina
+        self.__tela_dados_local_armazenamento = TelaLocalArmazenamento
 
-    def mostrar_menu(self):
-        print("")
-        print("-------- Vacina ----------")
-        print("")
-        print("1 - Cadastrar vacina")
-        print("2 - Adicionar doses de vacina")
-        print("3 - Excluir doses de vacina")
-        print("4 - Alterar doses de vacina")
-        print("5 - Exibir quantidade total de doses de vacina disponíveis por fabricante")
-        print("6 - Cadastrar local de armazenamento")
-        print("0 - Retornar")
+    def init_components(self, vacinas=[]):
+        layout = []
+        for i in range(len(vacinas)):
+            linha = [sg.Radio("{} - {}".format(vacinas[i][0], vacinas[i][1]), "vacina", size=(10, 1))]
+            layout.append(linha)
+        layout.append([sg.Button("Adicionar vacina", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Cadastrar local de armazenamento", key="3"), sg.Button("Excluir", key="4")])
+        self.__window = sg.Window("Vacinas").Layout(layout)
 
-        return self.ler_numero([1,2,3,4,5,6,0])
+    def mostrar_menu(self, vacinas):
+        print(vacinas)
+        self.init_components(vacinas)
+        botao, valores = self.__window.Read()
+        if botao is None:
+            botao = 0
+        cpf = None
+        for i in range(len(valores.values())):
+            if valores[i]:
+                cpf = vacinas[i][1]
+        self.close()
+        return (int(botao), cpf)
+
+    def popup(self,msg):
+        sg.Popup("","{}".format(msg))
 
     def recebe_dados_vacina(self):
-        fabricante = self.ler_string("Fabricante: ")
-        qtd_doses = self.ler_numero(None, "Quantidade de doses: ")
-        local_armazenamento = self.ler_string("Digite o local de armazenamento da vacina: ")
+        return self.__tela_dados_vacina().recebe_dados()
 
-        return {"fabricante": fabricante, "qtd_doses": qtd_doses,"local_armazenamento": local_armazenamento}
+    def recebe_dados_local_armazenamento(self):
+        return self.__tela_dados_local_armazenamento().recebe_dados()
 
-    def recebe_dados_amazenamento(self):
-        local_armazenamento = self.ler_string("Qual é o local de armazenamento: ")
-        temperatura = self.ler_numero(None, ("Qual a temperatura de armazento deste local: "))
+    def close(self):
+        self.__window.Close()
 
-        return {"local_armazenamento": local_armazenamento, "temperatura": temperatura}
-
-    def local_armazenamento_ja_cadastrado(self, local):
-        print("")
-        print(f"O local de armazenamento {local} já foi cadastrado anteriormente!")
-        input("")
-
-    def local_armazenamento_nao_cadastrado(self, local):
-        print("")
-        print(f"Não foi possível realizar o cadastro pois o local de armazenamento {local} ainda não foi cadastrado")
-        input("")
-
-    def vacina_repetida(self, fabricante):
-        print("")
-        print("A vacina com fabricante {} já está na lista de vacinas! ".format(fabricante))
-        input("")
-
-    def vacina_nao_existe(self, fabricante):
-        print("")
-        print("A vacina com fabricante {} ainda não existe! Por favor faça o cadastro! ".format(fabricante))
-        input("")
-
-    def mostrar_vacinas(self, dados_vacina):
-        print("")
-        print("Fabricante: ", dados_vacina["fabricante"])
-        print("Quantidade de doses: ", dados_vacina["quantidade de doses"])
-        input("")
-
-    def adiconar_doses(self):
-        fabricante = self.ler_string("As doses adicionadas são de qual fabricante?: ")
-        qtd_doses = self.ler_numero(None, "Quantidade de doses adicionadas: ")
-
-        return {"fabricante": fabricante, "qtd_doses": qtd_doses}
-
-    def excluir_doses(self):
-        fabricante = self.ler_string("As doses excluídas são de qual fabricante?: ")
-        qtd_doses = self.ler_numero(None, "Quantidade de doses excluídas: ")
-
-        return {"fabricante": fabricante, "qtd_doses": qtd_doses}
-
-    def alterar_doses(self):
-        fabricante = self.ler_string("As doses que serão alteradas são de qual fabricante?: ")
-        qtd_doses = self.ler_numero(None, "Nova quantidade de doses: ")
-
-        return {"fabricante": fabricante, "qtd_doses": qtd_doses}
-
-    

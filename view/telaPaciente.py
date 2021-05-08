@@ -14,7 +14,7 @@ class TelaPaciente(AbstractTela):
     def init_components(self, pacientes=[]):
         layout = []
         for i in range(len(pacientes)):
-            linha = [sg.Radio("{} - {}".format(pacientes[i][0], pacientes[i][1]), "paciente", size=(10, 1))]
+            linha = [sg.Radio("{} - {} - {}".format(pacientes[i][0], pacientes[i][1], pacientes[i][2]), "paciente", size=(10, 1))]
             layout.append(linha)
         layout.append([sg.Button("Adicionar Paciente", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Excluir", key="3")])
         self.__window = sg.Window("Pacientes").Layout(layout)
@@ -28,7 +28,7 @@ class TelaPaciente(AbstractTela):
         cpf = None
         for i in range(len(valores.values())):
             if valores[i]:
-                cpf = pacientes[i][1]
+                cpf = pacientes[i][2]
         self.close()
         return (int(botao), cpf)
 

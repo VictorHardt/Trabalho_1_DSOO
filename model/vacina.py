@@ -1,12 +1,12 @@
 from model.localArmazenamento import LocalArmazenamento
 
 class Vacina:
-    def __init__(self, fabricante: str, qtd_doses: int, local_armazenamento: LocalArmazenamento=None):
+    def __init__(self, fabricante: str, qtd_doses: int, local_armazenamento: str):
         if isinstance(fabricante, str):
             self.__fabricante = fabricante
         if isinstance(qtd_doses, int):
             self.__qtd_doses = qtd_doses
-        if isinstance(local_armazenamento, LocalArmazenamento):
+        if isinstance(local_armazenamento, str):
             self.__local_armazenamento = local_armazenamento
 
     @property
@@ -28,10 +28,10 @@ class Vacina:
             self.__qtd_doses = qtd_doses
 
     @property
-    def local_armazenamento(self) -> LocalArmazenamento:
+    def local_armazenamento(self) -> str:
         return self.__local_armazenamento
 
     @local_armazenamento.setter
-    def local_armanzenamento(self, local: LocalArmazenamento):
-        if isinstance(local, LocalArmazenamento):
-            self.__local_armazenamento = local
+    def local_armazenamento(self, local_armazenamento: str):
+        if isinstance(local_armazenamento, str):
+            self.__local_armazenamento = local_armazenamento

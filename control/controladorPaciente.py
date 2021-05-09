@@ -19,8 +19,7 @@ class ControladorPaciente:
             pacientes = self.__dao_pacientes.get_all()
             tuplas = []
             for paciente in pacientes:
-                print(paciente)
-                tuplas.append((paciente.idade, paciente.nome, paciente.cpf))
+                tuplas.append((paciente.idade, paciente.nome, paciente.cpf, paciente.endereco.cidade, paciente.endereco.rua, paciente.endereco.numero))
             opcao_escolhida = self.__tela.mostrar_menu(tuplas)
             cpf = opcao_escolhida[1]
             if cpf:
@@ -36,10 +35,10 @@ class ControladorPaciente:
             try:
                 nome = dados_paciente["nome"]
                 cpf = dados_paciente["cpf"]
-                idade = dados_paciente["idade"]
+                idade = int(dados_paciente["idade"])
                 cidade = dados_endereco["cidade"]
                 rua = dados_endereco["rua"]
-                numero = dados_endereco["numero"]
+                numero = int(dados_endereco["numero"])
 
                 paciente = self.__dao_pacientes.get(cpf)
 
@@ -64,9 +63,14 @@ class ControladorPaciente:
                     duplicado = True
                     raise CpfJahCadastradoException
                 if not duplicado:
-                    self.__dao_pacientes.remove(self.__paciente.cpf)
-                    self.__dao_pacientes.add(Paciente(dados_paciente["nome"],dados_paciente["cpf"],dados_paciente["idade"],dados_endereco["cidade"],dados_endereco["rua"],dados_endereco["numero"]))
+                    self.__paciente.nome = dados_paciente["nome"]
+                    # self.__paciente.cpf = dados_paciente["cpf"]
+                    self.__paciente.idade = int(dados_paciente["idade"])
+                    self.__paciente.endereco.cidade = dados_endereco["cidade"]
+                    self.__paciente.endereco.rua = dados_endereco["rua"]
+                    self.__paciente.endereco.numero = int(dados_endereco["numero"])
                     self.__tela.popup("Alterado com sucesso!")
+                    self.__dao_pacientes.update()
             except CpfJahCadastradoException:
                 pass
         else:

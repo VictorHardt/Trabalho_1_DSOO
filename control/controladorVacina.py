@@ -4,6 +4,9 @@ from model.localArmazenamento import LocalArmazenamento
 from persistence.vacinaDAO import VacinaDAO
 from persistence.localArmazenamentoDAO import LocalArmazenamentoDAO
 from exception.cpfJahCadastradoException import CpfJahCadastradoException
+from exception.LocalArmazenamentoNaoCadastradoException import LocalArmazenamentoNaoCadastradoException
+from exception.FabricanteJaCadastrado import FabricanteJaCadastrado
+from exception.LocalArmazenamentoJaCadastrado import LocalArmazenamentoJaCadastrado
 
 class ControladorVacina:
     def __init__(self):
@@ -26,7 +29,7 @@ class ControladorVacina:
             vacinas = self.__dao.get_all()
             tuplas = []
             for vacina in vacinas:
-                tuplas.append((vacina.fabricante))
+                tuplas.append((vacina.fabricante, vacina.qtd_doses, vacina.local_armazenamento))
             opcao_escolhida = self.__tela.mostrar_menu(tuplas)
             fabricante = opcao_escolhida[1]
             if fabricante:
@@ -40,17 +43,23 @@ class ControladorVacina:
         if dados_vacina is not 0:
             try:
                 fabricante = dados_vacina["fabricante"]
-                qtd_doses = dados_vacina["qtd_doses"]
+                qtd_doses = int(dados_vacina["qtd_doses"])
                 local_armazenamento = dados_vacina["local_armazenamento"]
 
                 vacina = self.__dao.get(fabricante)
 
-                if vacina is None:
+                local_armazenamento_atual = self.__dao_locais_armazenamento.get(local_armazenamento)
+
+                if vacina is None and local_armazenamento_atual is not None:
                     self.__dao.add(Vacina(fabricante, qtd_doses, local_armazenamento))
                     self.__tela.popup("Vacina cadastrada com sucesso!")
+                elif local_armazenamento_atual is None:
+                    raise LocalArmazenamentoNaoCadastradoException
                 else:
-                    raise CpfJahCadastradoException
-            except CpfJahCadastradoException:
+                    raise FabricanteJaCadastrado
+            except FabricanteJaCadastrado:
+                pass
+            except LocalArmazenamentoNaoCadastradoException:
                 pass
         else:
             pass
@@ -61,15 +70,16 @@ class ControladorVacina:
         if dados_local_armazenamento is not 0:
             try:
                 local_armazenamento = dados_local_armazenamento["local_armazenamento"]
-                temperatura = dados_local_armazenamento["temperatura"]
+                temperatura = int(dados_local_armazenamento["temperatura"])
 
                 local_armazenamento_atual = self.__dao_locais_armazenamento.get(local_armazenamento)
 
                 if local_armazenamento_atual is None:
                     self.__dao_locais_armazenamento.add(LocalArmazenamento(local_armazenamento, temperatura))
+                    self.__tela.popup("Local de armazenamento cadastrado com sucesso!")
                 else:
-                    raise CpfJahCadastradoException
-            except CpfJahCadastradoException:
+                    raise LocalArmazenamentoJaCadastrado
+            except LocalArmazenamentoJaCadastrado:
                 pass
         else:
             pass
@@ -87,9 +97,11 @@ class ControladorVacina:
                     duplicado = True
                     raise CpfJahCadastradoException
                 if not duplicado:
-                    self.__dao.remove(self.__vacina.fabricante)
-                    self.__dao.add(Vacina(dados_vacina["fabricante"], dados_vacina["qtd_doses"], dados_vacina["local_armazenamento"]))
+                    # self.__vacina.fabricante = dados_vacina["fabricante"]
+                    self.__vacina.qtd_doses = int(dados_vacina["qtd_doses"])
+                    self.__vacina.local_armazenamento = dados_vacina["local_armazenamento"]
                     self.__tela.popup("Alterado com sucesso!")
+                    self.__dao.update()
             except CpfJahCadastradoException:
                 pass
         else:

@@ -14,13 +14,12 @@ class TelaPaciente(AbstractTela):
     def init_components(self, pacientes=[]):
         layout = []
         for i in range(len(pacientes)):
-            linha = [sg.Radio("{} - {} - {}".format(pacientes[i][0], pacientes[i][1], pacientes[i][2]), "paciente", size=(10, 1))]
+            linha = [sg.Radio("{} - {} - {} - {} - {} - {}".format(pacientes[i][0], pacientes[i][1], pacientes[i][2], pacientes[i][3], pacientes[i][4], pacientes[i][5]), "paciente", size=(30, 1))]
             layout.append(linha)
         layout.append([sg.Button("Adicionar Paciente", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Excluir", key="3")])
         self.__window = sg.Window("Pacientes").Layout(layout)
 
     def mostrar_menu(self, pacientes):
-        print(pacientes)
         self.init_components(pacientes)
         botao, valores = self.__window.Read()
         if botao is None:

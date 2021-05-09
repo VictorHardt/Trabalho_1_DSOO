@@ -76,11 +76,7 @@ class ControladorPaciente:
         self.__dao_pacientes.remove(self.__paciente.cpf)
 
     def retorna_paciente(self, cpf:str) -> Paciente:
-        pac = None
-        for paciente in self.__dao_pacientes.get_all():
-            if paciente.cpf == cpf:
-                pac = paciente
-        return pac
+        return self.__dao_pacientes.get(cpf)
 
     def retorna(self):
         self.__continuar = False

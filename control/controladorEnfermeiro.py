@@ -3,6 +3,7 @@ from model.enfermeiro import Enfermeiro
 from model.paciente import Paciente
 from persistence.enfermeiroDAO import EnfermeiroDAO
 from exception.cpfJahCadastradoException import CpfJahCadastradoException
+from exception.enfermeiroNaoSelecionadoException import EnfermeiroNaoSelecionadoException
 
 class ControladorEnfermeiro:
     def __init__(self):
@@ -70,9 +71,18 @@ class ControladorEnfermeiro:
                 pass
         else:
             pass
-
+    
+    def retorna_enfermeiro(self, cpf):
+        return self.__dao.get(cpf)
+        
     def exlui_enfermeiro(self):
-        self.__dao.remove(self.__enfermeiro.cpf)
-
+        try:
+            if self.__enfermeiro:
+                self.__dao.remove(self.__enfermeiro.cpf)
+            else:
+                raise EnfermeiroNaoSelecionadoException
+        except EnfermeiroNaoSelecionadoException:
+            pass
+        
     def retorna(self):
         self.__continuar = False

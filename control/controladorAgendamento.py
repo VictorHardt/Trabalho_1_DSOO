@@ -5,12 +5,17 @@ from control.controladorEnfermeiro import ControladorEnfermeiro
 from control.controladorPaciente import ControladorPaciente
 from datetime import datetime
 from datetime import timedelta
+from persistence.agendamentoDAO import AgendamentoDAO
+from persistence.listaDeEsperaDAO import ListaDeEsperaDAO
+from exception.agendamentoNaoSelecionadoException import AgendamentoNaoSelecionadoException
 
 class ControladorAgendamento:
     def __init__(self, controlador_vacina, controlador_paciente, controlador_enfermeiro):
         self.__tela = TelaAgendamento()
         self.__continuar = True
-        self.__agendamentos = []
+        self.__dao = AgendamentoDAO()
+        self.__lista_de_espera_dao  = ListaDeEsperaDAO()
+        self.__agendamento = None
         self.__controlador_vacina = controlador_vacina
         self.__controlador_paciente = controlador_paciente
         self.__controlador_enfermeiro = controlador_enfermeiro
@@ -25,123 +30,95 @@ class ControladorAgendamento:
         self.__continuar = True
         lista_opcoes = {
             1: self.novo_agendamento, 
-            2: self.checa_agendamento, 
-            3: self.remove_agendamento, 
-            4: self.altera_agendamento,
-            5: self.vacina_primeira_dose,
-            6: self.agenda_segunda_dose,
-            7: self.vacina_segunda_dose,
-            8: self.lista_pacientes_uma_dose,
-            9: self.lista_pacientes_duas_doses,
-            10: self.lista_pacientes_na_lista_de_espera,
-            11: self.relatorio,
-            0: self.retorna
-        }
+            2: self.altera_agendamento, 
+            3: self.remove_agendamento,
+            4: self.vacina,
+            5: self.vacinados,
+            6: self.lista_pacientes_na_lista_de_espera,
+            7: self.relatorio,
+            0: self.retorna}
+
         while self.__continuar:            
-            opcao_escolhida = self.__tela.mostrar_menu()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            enfermeiros = self.__dao.get_all()
+            agdms = []
+            for enfermeiro in enfermeiros:
+                agdms.append([agendamento.paciente.nome, agendamento.paciente.cpf, agendamento.data])
+            opcao_escolhida = self.__tela.mostrar_menu(agdms)
+            agendamento = opcao_escolhida[1]
+            if agendamento:
+                self.__agendamento = self.__dao.get(agendamento)
+            funcao_escolhida = lista_opcoes[opcao_escolhida[0]]
             funcao_escolhida()
 
     def novo_agendamento(self):
-        
+
         dados_agendamento = self.__tela.recebe_dados_agendamento()
-        paciente = self.__controlador_paciente.retorna_paciente(dados_agendamento["cpf"])
-        enfermeiro = self.__controlador_enfermeiro.retorna_enfermeiro(dados_agendamento["nome_enfermeiro"])
-        data = dados_agendamento["data"]
-        hora = dados_agendamento["hora"]
-        vacina = self.__controlador_vacina.retorna_vacina_para_agendamento()
-        if paciente is None:
-            self.__tela.paciente_nao_existe_error(dados_agendamento["cpf"]) 
-        elif enfermeiro is None:
-            self.__tela.enfermeiro_nao_existe_error(dados_agendamento["nome_enfermeiro"])
-        elif vacina is None:
-            self.__tela.sem_estoque_de_vacina_error()
-            if paciente:
-                self.__pacientes_na_lista_de_espera.append(paciente)
-        else:
-            agendamento = Agendamento(data, hora, enfermeiro, paciente, vacina)
-            self.__agendamentos.append(agendamento)
-            if paciente in self.__pacientes_na_lista_de_espera:
-                self.__pacientes_na_lista_de_espera.remove(paciente)
-            self.__pacientes_com_agendamento.append(paciente)
-            self.__tela.mostra_agendamento(agendamento.paciente.nome, agendamento.enfermeiro.nome, agendamento.data.year, agendamento.data.month, agendamento.data.day, agendamento.vacina.fabricante)
-        
+        if dados_agendamento[1] != 0:
+            if dados_agendamento[0] == 1:
+                paciente = self.__controlador_paciente.retorna_paciente(dados_agendamento[1]["cpf"])
+                enfermeiro = self.__controlador_enfermeiro.retorna_enfermeiro(dados_agendamento[1]["cpf_enfermeiro"])
+                data = dados_agendamento[1]["data"]
+                hora = dados_agendamento[1]["hora"]
+                vacina = self.__controlador_vacina.retorna_vacina_para_agendamento()
+                if paciente is None:
+                    self.__tela.paciente_nao_existe_error(dados_agendamento[1]["cpf"]) 
+                elif enfermeiro is None:
+                    self.__tela.enfermeiro_nao_existe_error(dados_agendamento[1]["cpf_enfermeiro"])
+                elif vacina is None:
+                    self.__tela.sem_estoque_de_vacina_error()
+                    if paciente:
+                        self.__lista_de_espera_dao.add(paciente)
+                else:
+                    agendamento = Agendamento(data, hora, enfermeiro, paciente, vacina)
+                    self.__dao.append(agendamento)
+                    if self.__lista_de_espera_dao.get(paciente.cpf):
+                        self.__lista_de_espera_dao.remove(paciente.cpf)
+                    self.__tela.mostra_agendamento(agendamento.paciente.nome, agendamento.enfermeiro.nome, agendamento.data.year, agendamento.data.month, agendamento.data.day, agendamento.vacina.fabricante)
 
-    def checa_agendamento(self):
-
-        cpf = self.__tela.recebe_cpf()
-        agendamento = self.retorna_agendamento(cpf)
-        if agendamento:
-            self.__tela.mostra_agendamento(agendamento.paciente.nome, agendamento.enfermeiro.nome, agendamento.data.year, agendamento.data.month, agendamento.data.day, agendamento.vacina.fabricante)
-        else:
-            self.__tela.nao_ha_agendamento(cpf)
-
+            elif dados_agendamento[0] == 2:
+                agendamento = self.__dao.get(dados_agendamento['cpf'])
+                if agendamento and agendamento.vacinado_primeira_dose and not agendamento.vacinado_completamente and agendamento.data_segunda_dose is None:
+                    data = self.__dados_agendamento['data']
+                    if data >= agendamento.data + timedelta(20):
+                        agendamento.data_segunda_dose = data
+                        hora = self.__dados_agendamento['hora']
+                        agendamento.hora_segunda_dose = hora
+                        self.__tela.agendamento_segunda_dose(None, agendamento.paciente.nome, data.day, data.month, data.year, hora)
+                    else:
+                        data_val = agendamento.data + timedelta(20)
+                        self.__tela.data_invalida_error(data_val.day, data_val.month, data_val.year)
+                elif agendamento and not agendamento.vacinado_primeira_dose:
+                    self.__tela.agendamento_segunda_dose("nao_tomou_primeira_dose")
+                elif agendamento and agendamento.vacinado_completamente:
+                    self.__tela.agendamento_segunda_dose("ja_tomou_segunda_dose")
+                elif agendamento and agendamento.data_segunda_dose is not None:
+                    self.__tela.agendamento_segunda_dose("ja_agendado")
+                else:
+                    self.__tela.nao_ha_agendamento(cpf)     
 
     def remove_agendamento(self):
-        
-        cpf = self.__tela.recebe_cpf()
-        agendamento = self.retorna_agendamento(cpf)
-
-        if agendamento:
-            self.__pacientes_com_agendamento.remove(agendamento.paciente)
-            self.__agendamentos.remove(agendamento)
-            self.__tela.removeu_agendamento(None)
-        else:
-            self.__tela.removeu_agendamento(cpf)
+        try:
+            if self.__agendamento:
+                self.__dao.remove(self.__agendamento.paciente.cpf)
+            else:
+                raise AgendamentoNaoSelecionadoException
+        except AgendamentoNaoSelecionadoException:
+            pass
 
     def altera_agendamento(self):
         
-        cpf = self.__tela.recebe_cpf()
-        agendamento = self.retorna_agendamento(cpf)
-
-        if agendamento:          
-            opcao_escolhida = self.__tela.opcao_para_alteracao()
-            if opcao_escolhida == 1: #muda a data
-                nova_data = self.__tela.escolher_data()
-                agendamento.data = nova_data
-                self.__tela.alterado()
-            elif opcao_escolhida == 2: #muda a hora
-                nova_hora = self.__tela.escolher_hora()
-                agendamento.hora = nova_hora
-                self.__tela.alterado()
-            elif opcao_escolhida == 3: #muda o enfermeiro
-                nome_enfermeiro = self.__tela.escolher_enfermeiro()
-                enfermeiro = self.__controlador_enfermeiro.retorna_enfermeiro(nome_enfermeiro)
-                if enfermeiro:
-                    agendamento.enfermeiro = enfermeiro
-                    self.__tela.alterado()
-                else:
-                    self.__tela.enfermeiro_nao_existe_error(nome_enfermeiro)
-            else: #muda o paciente
-                cpf_paciente = self.__tela.escolher_paciente()
-                paciente = self.__controlador_paciente.retorna_paciente(cpf_paciente)
-                if paciente:
-                    self.__pacientes_com_agendamento.remove(agendamento.paciente)
-                    agendamento.paciente = paciente
-                    self.__pacientes_com_agendamento.append(paciente)
-                    self.__tela.alterado()
-                else:
-                    self.__tela.paciente_nao_existe_error(cpf_paciente)
-        else:
-            self.__tela.nao_ha_agendamento(cpf)
-
-    def lista_agendamentos(self):
-
-        agendamentos = []
-        for agendamento in self.__agendamentos:
-            string = f"Paciente: {agendamento.paciente.nome}, Enfermeiro: {agendamento.enfermeiro.nome}, Data: {agendamento.data.day}/{agendamento.data.month}/{agendamento.data.year}, Vacina: {agendamento.vacina.fabricante}."
-            agendamentos.append(string)
-        self.__tela.mostrar_agendamentos(agendamentos)
-
-    def retorna_agendamento(self, cpf):
-
-        agendamento = None
-        i = 0
-        while agendamento == None and i<len(self.__agendamentos):
-            if cpf == self.__agendamentos[i].paciente.cpf:
-                agendamento = self.__agendamentos[i]
-            i += 1   
-        return agendamento
+        try:
+            if self.__agendamento:
+                dados_agendamento = self.__tela.recebe_dados_agendamento()
+                if dados_agendamento[1] != 0:
+                    if dados_agendamento[0] == 1:
+                        pass
+                    elif dados_agendamento[0] == 2:
+                        pass
+            else:
+                raise AgendamentoNaoSelecionadoException
+        except AgendamentoNaoSelecionadoException:
+            pass
 
     def vacina_primeira_dose(self):
 
@@ -223,7 +200,7 @@ class ControladorAgendamento:
     def lista_pacientes_na_lista_de_espera(self):
 
         pacientes = []
-        for paciente in self.__pacientes_na_lista_de_espera:
+        for paciente in self.__dao.get_all():
             string = (f"Paciente: {paciente.nome} / CPF: {paciente.cpf}")
             pacientes.append(string)
         self.__tela.lista_pacientes(pacientes)
@@ -235,6 +212,12 @@ class ControladorAgendamento:
         pacientes_na_lista_de_espera = len(self.__pacientes_na_lista_de_espera)
         pacientes_com_agendamento = len(self.__pacientes_com_agendamento)
         self.__tela.relatorio(qtd_vacinas_aplicadas, vacinados_uma_dose, vacinados_duas_doses, pacientes_na_lista_de_espera, pacientes_com_agendamento)
+
+    def vacina(self):
+        pass
+
+    def vacinados(self):
+        pass
 
     def retorna(self):
         self.__continuar = False

@@ -1,68 +1,56 @@
 from view.abstractTela import AbstractTela
 from datetime import date
+import PySimpleGUI as sg
+from view.telaDadosAgendamento import TelaDadosAgendamento
 
 class TelaAgendamento(AbstractTela):
 
     def __init__(self):
-        pass
-        
-    def mostrar_menu(self):
+        self.__window = None
+        self.init_components([])
+        self.__tela_dados_agendamento = TelaDadosAgendamento()
 
-        print("")
-        print("------------Menu de Agendamentos------------")
-        print("")
-        print("1 : Novo Agendamento")
-        print("2 : Checa Agendamento")
-        print("3 : Remove Agendamento")
-        print("4 : Altera Agendamento")
-        print("5 : Vacina Primeira Dose")
-        print("6 : Agenda segunda Dose")
-        print("7 : Vacina Segunda Dose")
-        print("8 : Lista Pacientes Que Tomaram Uma Dose")
-        print("9 : Lista Pacientes Que Tomaram Duas Doses")
-        print("10 : Lista Pacientes Na Fila de Espera")
-        print("11 : Imprime Relatório")
-        print("0 : Retornar")
-        print("")
+    def init_components(self, agendamentos):
+        layout = []
+        for i in range(len(agendamentos)):
+            linha = [sg.Radio("{} - {}".format(agendamentos[i][0], agendametos[i][1]), "agendamento", size=(10, 1))]
+            layout.append(linha)
+        layout.append([sg.Button("Novo", size=(7,0), key="1"), sg.Button("Alterar", size=(7,0), key="2"), sg.Button("Excluir", size=(7,0), key="3")])
+        layout.append([sg.Button("Vacina", size=(7,0), key="4"), sg.Button("Vacinados", size=(7,0), key="5"), sg.Button("Lista de Espera", size=(7,0), key="6")])
+        layout.append([sg.Text("", size=(7,0)),sg.Button("Relatório", key="7")])
+        self.__window = sg.Window("Agendamento").Layout(layout)
 
-        return self.ler_numero([1,2,3,4,5,6,7,8,9,10,11,0])
+    def mostrar_menu(self, agendamentos):
+        self.init_components(agendamentos)
+        botao, valores = self.__window.Read()
+        if botao is None:
+            botao = 0
+        agendamento = None
+        for i in range(len(valores.values())):
+            if valores[i]:
+                agendamento = agendamentos[i][1]
+        self.close()
+        return (int(botao), agendamento)
 
     def recebe_dados_agendamento(self):
-
-        cpf_paciente = self.recebe_cpf()
-        nome_enfermeiro = self.escolher_enfermeiro()
-        data = self.escolher_data()
-        hora = self.escolher_hora()
-        dados_agendamento = {"cpf": cpf_paciente, "nome_enfermeiro": nome_enfermeiro, "data": data, "hora": hora}
-        return dados_agendamento
-
-    def recebe_cpf(self):
-        return self.ler_string("Digite seu cpf: ")
+        return self.__tela_dados_agendamento.recebe_dados()
 
     def paciente_nao_existe_error(self, cpf):
-        print("")
-        print("Não existe nenhum paciente cadastrado com o cpf {}, realize o cadastro do paciente antes do agendamento.".format(cpf))
-        input("")
+        msg = ("Não existe nenhum paciente cadastrado com o cpf {}, realize o cadastro do paciente antes do agendamento.".format(cpf))
+        self.popup(msg)
 
-    def enfermeiro_nao_existe_error(self, nome):
-        print("")
-        print("Não existe nenhum enfermeiro cadastrado com o nome {}, realize o cadastro do enfermeiro antes do agendamento.".format(nome))
-        input("")
+    def enfermeiro_nao_existe_error(self, cpf):
+
+        self.popup("Não existe nenhum enfermeiro cadastrado com o cpf {}, realize o cadastro do enfermeiro antes do agendamento.".format(cpf))
 
     def sem_estoque_de_vacina_error(self):
-        print("")
-        print("Não há doses suficientes de vacina para o agendamento, o paciente foi movido para a fila de espera.")
-        input("")
+        self.popup("Não há doses suficientes de vacina para o agendamento, o paciente foi movido para a fila de espera.")
 
     def mostra_agendamento(self, paciente_nome, enfermeiro_nome, ano, mes, dia, fabricante):
-        print("")
-        print("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}!".format(paciente_nome, dia, mes, ano, enfermeiro_nome, fabricante))
-        input("")
+        self.popup("{}, você tem um agendamento para o dia {}/{}/{} com o enfermeiro {}, para ser vacinado com a vacina {}!".format(paciente_nome, dia, mes, ano, enfermeiro_nome, fabricante))
 
     def nao_ha_agendamento(self, cpf):
-        print("")
-        print("Não há nenhum agendamento com o cpf {}.".format(cpf))
-        input("")
+        self.popup("Não há nenhum agendamento com o cpf {}.".format(cpf))
 
     def removeu_agendamento(self, cpf):
 
@@ -83,24 +71,9 @@ class TelaAgendamento(AbstractTela):
 
         return self.ler_numero([1,2,3,4])
 
-    def escolher_data(self):
-        data = None
-        while not isinstance(data, date):
-            try:
-                ano = self.ler_numero(None, "Para que ano é o agendamento: ")
-                mes = self.ler_numero([1,2,3,4,5,6,7,8,9,10,11,12], "Para que mês é o agendamento: ")
-                dia = self.ler_numero([i+1 for i in range(31)], "Para que dia é o agendamento: ")
-                data = date(ano, mes, dia)
-            except Exception:
-                print("A data não é válida!")
-        return data
-
     def escolher_enfermeiro(self):
         return self.ler_string("Digite o nome do enfermeiro: ")
 
-    def escolher_hora(self):
-        return self.ler_numero([8,9,10,11,12,13,14,15,16,17,18], "Escolha um horário entre 8 e 18 horas: ")
-    
     def escolher_paciente(self):
         return self.ler_string("Digite o cpf do novo paciente: ")
 
@@ -178,3 +151,9 @@ class TelaAgendamento(AbstractTela):
         print(f"Quantidade de pessoas que tomaram as duas doses: {vacinados_duas_doses}")
         print(f"Quantidade de pessoas que esperam na fila de vacinação: {pacientes_na_lista_de_espera}")
         print(f"Quantidade de pessoas com vacinação agendada: {pacientes_com_agendamento}")
+
+    def popup(self, msg):
+        sg.Popup("", "{}".format(msg))
+
+    def close(self):
+        self.__window.Close()

@@ -98,10 +98,11 @@ class ControladorVacina:
     def retorna_vacina_para_agendamento(self):
 
         vacina = None
+        vacinas = self.__dao.get_all()
         i = 0
-        while vacina is None and i < len(self.__vacinas):
-            if self.__vacinas[i].qtd_doses >= 2:
-                vacina = self.__vacinas[i]
+        while vacina is None and i < len(vacinas):
+            if vacinas()[i].qtd_doses >= 2:
+                vacina = vacinas[i]
                 vacina.qtd_doses -= 2
         return vacina
 

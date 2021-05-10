@@ -1,9 +1,8 @@
-from view.abstractTela import AbstractTela
 import PySimpleGUI as sg
 from view.telaDadosPessoa import TelaDadosPessoa
 from view.telaEndereço import TelaDadosEndereco
 
-class TelaPaciente(AbstractTela):
+class TelaPaciente():
 
     def __init__(self):
         self.__window = None

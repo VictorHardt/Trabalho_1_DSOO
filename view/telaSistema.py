@@ -1,7 +1,6 @@
 import PySimpleGUI as sg
-from view.abstractTela import AbstractTela
 
-class TelaSistema(AbstractTela):
+class TelaSistema():
 
     def __init__(self):
         self.__windown = None

@@ -16,7 +16,7 @@ class TelaDadosAgendamento:
                     [sg.Text("Hora:", size=(5,0)), sg.Spin(values=('8','9','10',"11",'12','13','14','15','16','17','18'), initial_value='8', key="hora")],
                     [sg.Button("Primeira Dose", key='1'), sg.Button("Segunda Dose", key='2'), sg.Cancel()]
                  ]
-        self.__window = sg.Window("Cadastro").Layout(layout)
+        self.__window = sg.Window("Novo Agendamento").Layout(layout)
 
     def recebe_dados(self):
         self.init_components()

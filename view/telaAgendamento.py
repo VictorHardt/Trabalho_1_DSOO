@@ -1,9 +1,8 @@
-from view.abstractTela import AbstractTela
 from datetime import date
 import PySimpleGUI as sg
 from view.telaDadosAgendamento import TelaDadosAgendamento
 
-class TelaAgendamento(AbstractTela):
+class TelaAgendamento():
 
     def __init__(self):
         self.__window = None

@@ -1,9 +1,8 @@
-from view.abstractTela import AbstractTela
 import PySimpleGUI as sg
 from view.telaDadosVacina import TelaDadosVacina
 from view.telaLocalArmazenamento import TelaLocalArmazenamento
 
-class TelaVacina(AbstractTela):
+class TelaVacina():
 
     def __init__(self):
         self.__window = None

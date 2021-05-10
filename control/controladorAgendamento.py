@@ -122,7 +122,6 @@ class ControladorAgendamento:
                 if not self.__agendamento.vacinado_completamente:
                     dados_agendamento = self.__tela.recebe_dados_agendamento()
                     if dados_agendamento[1] == 1:
-                         #self.__agendamento.paciente = self.__controlador_paciente.retorna_paciente(dados_agendamento[1]["cpf"])
                         self.__agendamento.enfermeiro = self.__controlador_enfermeiro.retorna_enfermeiro(dados_agendamento[1]["cpf_enfermeiro"])
                         self.__agendamento.data = dados_agendamento[1]["data"]
                         self.__agendamento.hora = dados_agendamento[1]["hora"]
@@ -131,16 +130,19 @@ class ControladorAgendamento:
                         elif enfermeiro is None:
                             self.__tela.enfermeiro_nao_existe_error(dados_agendamento[1]["cpf_enfermeiro"])
                     elif dados_agendamento[0] == 2:
-                        data = dados_agendamento[1]['data']
-                        if data >= agendamento.data + timedelta(20):
-                            agendamento.data_segunda_dose = data
-                            hora = dados_agendamento[1]['hora']
-                            agendamento.hora_segunda_dose = hora
-                            self.__tela.agendamento_segunda_dose(None, agendamento.paciente.nome, data.day, data.month, data.year, hora)
+                        if dados_agendamento.paciente.cpf == dados_alteração[1]["cpf"]:
+                            data = dados_agendamento[1]['data']
+                            if data >= agendamento.data + timedelta(20):
+                                agendamento.data_segunda_dose = data
+                                hora = dados_agendamento[1]['hora']
+                                agendamento.hora_segunda_dose = hora
+                                self.__tela.agendamento_segunda_dose(None, agendamento.paciente.nome, data.day, data.month, data.year, hora)
+                            else:
+                                data_val = agendamento.data + timedelta(20)
+                                self.__tela.data_invalida_error(data_val.day, data_val.month, data_val.year)
+                            self.__dao.update()
                         else:
-                            data_val = agendamento.data + timedelta(20)
-                            self.__tela.data_invalida_error(data_val.day, data_val.month, data_val.year)
-                    self.__dao.update()
+                            self.__tela.popup("O cpf inserido não é o mesmo do agendamento selecionado!")
                 else:
                     self.__tela.popup("Não é possivel alterar um agendamento após a vacinação!")
             else:

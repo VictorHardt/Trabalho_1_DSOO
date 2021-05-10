@@ -63,14 +63,15 @@ class ControladorPaciente:
                     duplicado = True
                     raise CpfJahCadastradoException
                 if not duplicado:
+                    self.__dao_pacientes.remove(self.__paciente.cpf)
                     self.__paciente.nome = dados_paciente["nome"]
-                    # self.__paciente.cpf = dados_paciente["cpf"]
+                    self.__paciente.cpf = dados_paciente["cpf"]
                     self.__paciente.idade = int(dados_paciente["idade"])
                     self.__paciente.endereco.cidade = dados_endereco["cidade"]
                     self.__paciente.endereco.rua = dados_endereco["rua"]
                     self.__paciente.endereco.numero = int(dados_endereco["numero"])
                     self.__tela.popup("Alterado com sucesso!")
-                    self.__dao_pacientes.update()
+                    self.__dao_pacientes.add(self.__paciente)
             except CpfJahCadastradoException:
                 pass
         else:

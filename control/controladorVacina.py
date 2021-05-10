@@ -92,17 +92,26 @@ class ControladorVacina:
 
         if dados_vacina is not 0:
             try:
+                local_armazenamento = dados_vacina["local_armazenamento"]
+                local_armazenamento_atual = self.__dao_locais_armazenamento.get(local_armazenamento)
+
                 duplicado = False
                 if self.__dao.get(dados_vacina["fabricante"]) is not None:
                     duplicado = True
                     raise CpfJahCadastradoException
+                elif local_armazenamento_atual is None:
+                    duplicado = True
+                    raise LocalArmazenamentoNaoCadastradoException
                 if not duplicado:
-                    # self.__vacina.fabricante = dados_vacina["fabricante"]
+                    self.__dao.remove(self.__vacina.fabricante)
+                    self.__vacina.fabricante = dados_vacina["fabricante"]
                     self.__vacina.qtd_doses = int(dados_vacina["qtd_doses"])
                     self.__vacina.local_armazenamento = dados_vacina["local_armazenamento"]
                     self.__tela.popup("Alterado com sucesso!")
-                    self.__dao.update()
+                    self.__dao.add(self.__vacina)
             except CpfJahCadastradoException:
+                pass
+            except LocalArmazenamentoNaoCadastradoException:
                 pass
         else:
             pass

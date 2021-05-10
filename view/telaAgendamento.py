@@ -67,7 +67,7 @@ class TelaAgendamento(AbstractTela):
         if nome:
             self.popup(f"{nome} tomou a primeira dose da vacina {vacina}")
         else:
-            self.popup("O paciente já tomou a primeira dose!")
+            self.popup("O paciente já tomou a primeira dose, agende a segunda dose!")
         
     def agendamento_segunda_dose(self, erro, nome=None, dia=None, mes=None, ano=None, hora=None):
 

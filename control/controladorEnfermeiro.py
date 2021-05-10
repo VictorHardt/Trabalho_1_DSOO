@@ -63,10 +63,11 @@ class ControladorEnfermeiro:
                     duplicado = True
                     raise CpfJahCadastradoException
                 if not duplicado:
-                    # self.__enfermeiro.cpf = dados_alteracao["cpf"]
+                    self.__dao.remove(self.__enfermeiro.cpf)
+                    self.__enfermeiro.cpf = dados_alteracao["cpf"]
                     self.__enfermeiro.nome = dados_alteracao["nome"]
                     self.__tela.popup("Alterado com sucesso!")
-                    self.__dao.update()
+                    self.__dao.add(self.__enfermeiro)
             except CpfJahCadastradoException:
                 pass
         else:

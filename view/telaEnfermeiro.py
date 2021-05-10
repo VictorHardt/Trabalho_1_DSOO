@@ -13,7 +13,7 @@ class TelaEnfermeiro(AbstractTela):
 
         layout = []
         for i in range(len(enfermeiros)):
-            linha = [sg.Radio("{} - {}".format(enfermeiros[i][0], enfermeiros[i][1]), "enfermeiro", size=(10, 1))]
+            linha = [sg.Radio("{} - {}".format(enfermeiros[i][0], enfermeiros[i][1]), "enfermeiro")]
             layout.append(linha)
         layout.append([sg.Button("Adicionar Enfermeiro", key="1"), sg.Button("Alterar Dados", key="2"), sg.Button("Excluir", key="3")])
         self.__window = sg.Window("Enfermeiros").Layout(layout)

@@ -22,8 +22,8 @@ class TelaLocalArmazenamento():
                 valores = 0
                 continuar = False
             elif len(valores["local_armazenamento"]) > 0 and len(valores["temperatura"]) > 0:
-                valores["local_armazenamento"].strip().capitalize()
-                valores["temperatura"].strip().capitalize()
+                valores["local_armazenamento"] = valores["local_armazenamento"].strip().capitalize()
+                valores["temperatura"] = valores["temperatura"].strip()
                 continuar = False
         self.close()
         return valores

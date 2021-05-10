@@ -23,9 +23,9 @@ class TelaDadosPessoa():
                 valores = 0
                 continuar = False
             elif len(valores["nome"]) > 0 and len(valores["cpf"]) > 0 and len(valores["idade"]) > 0:
-                valores["nome"].strip().capitalize()
-                valores["cpf"].strip().capitalize()
-                valores["idade"].strip().capitalize()
+                valores["nome"] = valores["nome"].strip().capitalize()
+                valores["cpf"] = valores["cpf"].strip()
+                valores["idade"] = valores["idade"].strip()
                 continuar = False
         self.close()
         return valores

@@ -24,9 +24,9 @@ class TelaDadosEndereco():
                 valores = 0
                 continuar = False
             elif len(valores["cidade"]) > 0 and len(valores["rua"]) > 0 and len(valores["numero"]) > 0:
-                valores["cidade"].strip().capitalize()
-                valores["rua"].strip().capitalize()
-                valores["numero"].strip().capitalize()
+                valores["cidade"]  = valores["cidade"].strip().capitalize()
+                valores["rua"] = valores["rua"].strip().capitalize()
+                valores["numero"] = valores["numero"].strip()
                 continuar = False
         self.close()
         return valores
